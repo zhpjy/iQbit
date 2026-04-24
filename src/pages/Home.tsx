@@ -50,13 +50,18 @@ const encodeCategoryFilterValue = (category: string) =>
 
 const normalizeCategoryFilterValue = (
   value: string,
-  categoryNames: string[]
+  categoryNames: string[],
+  categoriesLoaded: boolean
 ) => {
   if (value === CATEGORY_FILTER_ALL) {
     return CATEGORY_FILTER_ALL;
   }
 
   if (value.startsWith(CATEGORY_FILTER_PREFIX)) {
+    return value;
+  }
+
+  if (!categoriesLoaded) {
     return value;
   }
 
@@ -76,9 +81,36 @@ const normalizeCategoryFilterValue = (
 
 const decodeCategoryFilterValue = (
   value: string,
-  categoryNames: string[]
+  categoryNames: string[],
+  categoriesLoaded: boolean
 ) => {
-  const normalizedValue = normalizeCategoryFilterValue(value, categoryNames);
+  if (value === CATEGORY_FILTER_ALL) {
+    return { showAll: true as const, category: "" };
+  }
+
+  if (value.startsWith(CATEGORY_FILTER_PREFIX)) {
+    return {
+      showAll: false as const,
+      category: value.slice(CATEGORY_FILTER_PREFIX.length),
+    };
+  }
+
+  if (!categoriesLoaded) {
+    if (
+      value === LEGACY_SHOW_ALL_FILTER ||
+      value === LEGACY_CATEGORY_ALL_FILTER
+    ) {
+      return { showAll: true as const, category: "" };
+    }
+
+    return { showAll: false as const, category: value };
+  }
+
+  const normalizedValue = normalizeCategoryFilterValue(
+    value,
+    categoryNames,
+    categoriesLoaded
+  );
 
   if (normalizedValue === CATEGORY_FILTER_ALL) {
     return { showAll: true as const, category: "" };
@@ -223,25 +255,40 @@ const Home = () => {
 
   const bgColor = useColorModeValue("white", "gray.900");
   const { isDarkMode } = useTernaryDarkMode();
+  const categoriesLoaded = categories !== undefined;
   const categoryNames = useMemo(
     () => Object.values(categories || {}).map((category) => category.name),
     [categories]
   );
   const normalizedFilterCategory = normalizeCategoryFilterValue(
     filterCategory,
-    categoryNames
+    categoryNames,
+    categoriesLoaded
   );
   const decodedFilterCategory = decodeCategoryFilterValue(
     filterCategory,
-    categoryNames
+    categoryNames,
+    categoriesLoaded
   );
+  const displayFilterCategory =
+    decodedFilterCategory.showAll
+      ? CATEGORY_FILTER_ALL
+      : normalizedFilterCategory;
   const normalizedFilterStatus = normalizeFilterValue(filterStatus);
 
   useEffect(() => {
-    if (normalizedFilterCategory !== filterCategory) {
+    if (
+      categoriesLoaded &&
+      normalizedFilterCategory !== filterCategory
+    ) {
       setFilterCategory(normalizedFilterCategory);
     }
-  }, [filterCategory, normalizedFilterCategory, setFilterCategory]);
+  }, [
+    categoriesLoaded,
+    filterCategory,
+    normalizedFilterCategory,
+    setFilterCategory,
+  ]);
 
   const filterIndicator = useMemo(() => {
     let indicator = 0;
@@ -510,7 +557,7 @@ const Home = () => {
                 <FormControl>
                   <FormLabel>{zhCN.home.category}</FormLabel>
                   <Select
-                    value={normalizedFilterCategory}
+                    value={displayFilterCategory}
                     onChange={(e) => setFilterCategory(e.target.value)}
                   >
                     <option value={CATEGORY_FILTER_ALL}>
