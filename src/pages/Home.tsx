@@ -36,7 +36,7 @@ import { zhCN } from "../locales/zh-CN";
 
 import { List, WindowScroller } from "react-virtualized";
 
-const SHOW_ALL_FILTER = "all";
+const SHOW_ALL_FILTER = "__all__";
 const LEGACY_SHOW_ALL_FILTER = ["Show", "All"].join(" ");
 
 const normalizeFilterValue = (value: string) =>
@@ -175,15 +175,17 @@ const Home = () => {
 
   const bgColor = useColorModeValue("white", "gray.900");
   const { isDarkMode } = useTernaryDarkMode();
+  const normalizedFilterCategory = normalizeFilterValue(filterCategory);
+  const normalizedFilterStatus = normalizeFilterValue(filterStatus);
 
   const filterIndicator = useMemo(() => {
     let indicator = 0;
     if (filterSearch !== "") indicator++;
-    if (normalizeFilterValue(filterStatus) !== SHOW_ALL_FILTER) indicator++;
-    if (normalizeFilterValue(filterCategory) !== SHOW_ALL_FILTER) indicator++;
+    if (normalizedFilterStatus !== SHOW_ALL_FILTER) indicator++;
+    if (normalizedFilterCategory !== SHOW_ALL_FILTER) indicator++;
 
     return indicator;
-  }, [filterCategory, filterSearch, filterStatus]);
+  }, [filterSearch, normalizedFilterCategory, normalizedFilterStatus]);
 
   const Torrents = useMemo(() => {
     if (torrentsTx === undefined) {
@@ -194,17 +196,23 @@ const Home = () => {
       ?.sort((a, b) => b[1]?.added_on - a[1]?.added_on)
       ?.filter(([hash]) => !removedTorrs.includes(hash))
       ?.filter(([hash, torr]) =>
-        normalizeFilterValue(filterCategory) !== SHOW_ALL_FILTER
-          ? torr.category === filterCategory
+        normalizedFilterCategory !== SHOW_ALL_FILTER
+          ? torr.category === normalizedFilterCategory
           : true
       )
       ?.filter(([hash, torr]) =>
-        normalizeFilterValue(filterStatus) !== SHOW_ALL_FILTER
-          ? torr.state === filterStatus
+        normalizedFilterStatus !== SHOW_ALL_FILTER
+          ? torr.state === normalizedFilterStatus
           : true
       )
       ?.filter(([hash, torr]) => torr.name.includes(filterSearch));
-  }, [torrentsTx, removedTorrs, filterCategory, filterStatus, filterSearch]);
+  }, [
+    torrentsTx,
+    removedTorrs,
+    normalizedFilterCategory,
+    normalizedFilterStatus,
+    filterSearch,
+  ]);
 
   const Categories = useMemo(() => {
     return Object.values(categories || {}).map((c) => ({
@@ -436,7 +444,7 @@ const Home = () => {
                 <FormControl>
                   <FormLabel>{zhCN.home.category}</FormLabel>
                   <Select
-                    value={normalizeFilterValue(filterCategory)}
+                    value={normalizedFilterCategory}
                     onChange={(e) =>
                       setFilterCategory(normalizeFilterValue(e.target.value))
                     }
@@ -450,7 +458,7 @@ const Home = () => {
                 <FormControl>
                   <FormLabel>{zhCN.home.status}</FormLabel>
                   <Select
-                    value={normalizeFilterValue(filterStatus)}
+                    value={normalizedFilterStatus}
                     onChange={(e) =>
                       setFilterStatus(normalizeFilterValue(e.target.value))
                     }
