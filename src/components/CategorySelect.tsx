@@ -26,7 +26,7 @@ const CategorySelect = ({category, onSelected}:CategorySelectProps) => {
    <>
      <Flex alignItems={"center"}>
        <Button opacity={category ? "100%" : "50%"} variant={"unstyled"} display={"flex"} minH={0} height={"auto"} rightIcon={<IoChevronDown />} onClick={catDisclosure.onOpen}>
-         <Heading size={"sm"}>{category || zhCN.home.category}</Heading>
+         <Heading size={"sm"}>{category || zhCN.home.selectCategory}</Heading>
        </Button>
      </Flex>
      <IosActionSheet disclosure={catDisclosure} options={[

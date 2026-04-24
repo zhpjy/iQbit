@@ -315,7 +315,10 @@ const Home = () => {
                       : files.length > 0
                       ? files.length === 1
                         ? files[0].name
-                        : `已选择 ${files.length} 个文件`
+                        : zhCN.home.filesSelected.replace(
+                            "{count}",
+                            String(files.length)
+                          )
                       : zhCN.home.clickOrDrag}
                   </Heading>
                   <Input

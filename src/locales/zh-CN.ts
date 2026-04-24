@@ -35,6 +35,7 @@ export const zhCN = {
     magnetUrl: "磁力链接 / 地址",
     addTorrentFile: "通过 .torrent 文件添加",
     clear: "清空",
+    filesSelected: "已选择 {count} 个文件",
     dropIt: "松手即可上传",
     clickOrDrag: "点击或拖拽到此处",
     selectCategory: "选择分类",
