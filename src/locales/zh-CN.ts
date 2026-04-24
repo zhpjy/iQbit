@@ -118,12 +118,14 @@ export const zhCN = {
     title: "搜索",
     warning:
       "警告：从这些搜索引擎下载种子时，请务必遵守你所在国家或地区的版权法律。",
+    searchPlaceholder: "搜索 {category}...",
     selectProvider: "选择搜索源",
     results: "结果",
     description: "简介",
     info: "信息",
     ratings: "评分",
     runtime: "片长",
+    runtimeUnit: "分钟",
     language: "语言",
     mpaRating: "分级",
     genres: "类型",
@@ -136,6 +138,18 @@ export const zhCN = {
     stopButton: "停止",
     searchWith: "使用 {provider} 搜索",
     experimental: "实验性",
+    categories: {
+      Movies: "电影",
+      TV: "剧集",
+      Shows: "剧集",
+      Video: "视频",
+      Audio: "音频",
+      Applications: "应用",
+      Games: "游戏",
+      Porn: "成人视频",
+      Other: "其他",
+      all: "全部",
+    },
   },
   trending: {
     title: "热门",
@@ -186,3 +200,11 @@ export const zhCN = {
     position2: "位置 2",
   },
 } as const;
+
+export const getSearchCategoryLabel = (category: string) => {
+  return (
+    zhCN.search.categories[
+      category as keyof typeof zhCN.search.categories
+    ] || category
+  );
+};

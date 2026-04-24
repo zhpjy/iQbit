@@ -29,7 +29,7 @@ import PosterGrid from "../components/PosterGrid";
 import IosActionSheet from "../components/ios/IosActionSheet";
 import {TorrClient} from "../utils/TorrClient";
 import CategorySelect from "../components/CategorySelect";
-import { zhCN } from "../locales/zh-CN";
+import { getSearchCategoryLabel, zhCN } from "../locales/zh-CN";
 
 export const useSearchFromParams = (callback: () => void) => {
   const { query } = useParams();
@@ -154,7 +154,10 @@ const YTSSearch = (props: SearchProviderComponentProps) => {
         onChange={(e) => props.searchState[1](e.target.value)}
         isLoading={isLoading}
         onSearch={() => mutate()}
-        placeholder={`${zhCN.search.title} ${props.category}...`}
+        placeholder={zhCN.search.searchPlaceholder.replace(
+          "{category}",
+          getSearchCategoryLabel(props.category)
+        )}
       />
       {(!data?.movies?.length || true) && <Filters {...props.filterState} />}
 
@@ -235,7 +238,7 @@ const YTSSearch = (props: SearchProviderComponentProps) => {
               <InfoDataBox
                 title={zhCN.search.runtime}
                 icon={<IoTime />}
-                label={(selectedMovie?.runtime || "--") + " min"}
+                label={`${selectedMovie?.runtime || "--"} ${zhCN.search.runtimeUnit}`}
               />
               <InfoDataBox
                 title={zhCN.search.language}

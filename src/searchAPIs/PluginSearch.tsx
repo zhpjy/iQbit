@@ -19,7 +19,7 @@ import { useIsLargeScreen } from "../utils/screenSize";
 import { StatWithIcon } from "../components/StatWithIcon";
 import { parseFromString, qualityAliases, typeAliases } from "./tpb";
 import Filters from "../components/Filters";
-import { zhCN } from "../locales/zh-CN";
+import { getSearchCategoryLabel, zhCN } from "../locales/zh-CN";
 
 const PluginSearch = (props: SearchProviderComponentProps) => {
   const [searchId, setSearchId] = useState<number>();
@@ -110,7 +110,10 @@ const PluginSearch = (props: SearchProviderComponentProps) => {
         onChange={(e) => props.searchState[1](e.target.value)}
         isLoading={createLoading}
         onSearch={() => createSearch(props.searchState[0])}
-        placeholder={`${zhCN.search.title} ${props.category}...`}
+        placeholder={zhCN.search.searchPlaceholder.replace(
+          "{category}",
+          getSearchCategoryLabel(props.category)
+        )}
       />
 
       {searchId && (

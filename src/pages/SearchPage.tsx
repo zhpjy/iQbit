@@ -21,7 +21,7 @@ import { TorrClient } from "../utils/TorrClient";
 import QbitLogo from "../images/qbitLogo";
 import { SearchPluginsPageQuery } from "./SearchPluginsPage";
 import PluginSearch from "../searchAPIs/PluginSearch";
-import { zhCN } from "../locales/zh-CN";
+import { getSearchCategoryLabel, zhCN } from "../locales/zh-CN";
 
 export type ProviderKeys = "YTS" | "TPB" | "plugin";
 
@@ -184,7 +184,7 @@ const SearchPage = () => {
                 onClick={() => setSelectedCategory(key)}
                 small
               >
-                {item}
+                {getSearchCategoryLabel(item)}
               </ProviderButton>
             ))}
           </Flex>
