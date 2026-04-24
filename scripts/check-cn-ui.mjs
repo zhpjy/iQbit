@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 const checks = [
   {
     file: "src/components/Auth.tsx",
-    patterns: [
+    forbiddenPatterns: [
       ["Please Sign In", />\s*Please Sign In\s*</],
       ["Username", /label=\{"Username"\}/],
       ["Password", /label=\{"Password"\}/],
@@ -12,7 +12,7 @@ const checks = [
   },
   {
     file: "src/Pages.tsx",
-    patterns: [
+    forbiddenPatterns: [
       ["Downloads", /(?:title|label):\s*"Downloads"/],
       ["Search", /(?:title|label):\s*"Search"/],
       ["Trending", /(?:title|label):\s*"Trending"/],
@@ -21,7 +21,7 @@ const checks = [
   },
   {
     file: "src/pages/SettingsPage.tsx",
-    patterns: [
+    forbiddenPatterns: [
       ["Back", />\s*Back\s*</],
       ["Settings", /title:\s*"Settings"|title=\{page \|\| "Settings"\}/],
       ["Search Plugins", /title:\s*"Search Plugins"/],
@@ -30,17 +30,36 @@ const checks = [
   },
   {
     file: "src/layout/default.tsx",
-    patterns: [["Log Out", />\s*Log Out\s*</]],
+    forbiddenPatterns: [["Log Out", />\s*Log Out\s*</]],
+  },
+  {
+    file: "src/pages/TabSelectorPage.tsx",
+    forbiddenPatterns: [
+      ["Position 1", />\s*Position 1\s*</],
+      ["Position 2", />\s*Position 2\s*</],
+    ],
+  },
+  {
+    file: "src/components/PageHeader.tsx",
+    forbiddenPatterns: [["Back", /aria-label=\{"Back"\}|title=\{"Back"\}/]],
+    requiredPatterns: [
+      ["zhCN.common.back", /aria-label=\{zhCN\.common\.back\}/],
+    ],
   },
 ];
 
 const failures = [];
 
-for (const { file, patterns } of checks) {
+for (const { file, forbiddenPatterns = [], requiredPatterns = [] } of checks) {
   const content = readFileSync(file, "utf8");
-  for (const [label, pattern] of patterns) {
+  for (const [label, pattern] of forbiddenPatterns) {
     if (pattern.test(content)) {
       failures.push(`${file}: ${label}`);
+    }
+  }
+  for (const [label, pattern] of requiredPatterns) {
+    if (!pattern.test(content)) {
+      failures.push(`${file}: missing ${label}`);
     }
   }
 }
