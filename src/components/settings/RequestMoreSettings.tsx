@@ -8,22 +8,21 @@ export interface RequestMoreSettingsProps {}
 
 const RequestMoreSettings = (props: RequestMoreSettingsProps) => {
   return (
-    <SettingsBox title={"Need other settings from this page?"}>
+    <SettingsBox title={"还需要这个页面里的其他设置吗？"}>
       <Text>
-        I wasn't able to add all settings since... well, there's a lot of them.
+        当前只暴露了常用设置项。
         <br />
-        <br />I do plan to eventually have all of them, but I appologize if I'm
-        missing something you need. Please use the toggle below to turn off this
-        custom UI and change whatever you need 😃
+        <br />
+        如果你缺少某个设置，请使用下面的开关关闭此自定义界面，然后在原始 Web UI
+        中修改需要的选项。
       </Text>
       <SettingsSwitch
-        label={"Use Custom WebUI"}
+        label={"使用自定义 Web UI"}
         settingKey={"alternative_webui_enabled"}
       />
       <Box>
         <Text>
-          Also, feel free to put up an issue for the setting you need (if one
-          doesn't exist yet).
+          也可以为你需要的设置提交一个 Issue（如果还没有人提过的话）。
         </Text>
         <Link
           textDecoration={"underline"}
@@ -31,7 +30,7 @@ const RequestMoreSettings = (props: RequestMoreSettingsProps) => {
           target={"_blank"}
           rel="noreferrer"
         >
-          Github Issues <IoOpen style={{ display: "inline" }} />
+          GitHub Issues <IoOpen style={{ display: "inline" }} />
         </Link>
       </Box>
     </SettingsBox>
