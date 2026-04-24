@@ -52,7 +52,8 @@ const TabSelectorPage = () => {
               opacity={tabs.indexOf(tabPageId) === -1 ? 0.5 : 1}
               onChange={(e) =>
                 setTabs((curr) =>
-                  curr.map((value, index) => {
+                  (Array.isArray(curr) ? curr : defaultTabs).map(
+                    (value, index) => {
                     const currentValue = normalizeTabPageId(value) || "";
 
                     if (e.target.value === "-1" && tabPageId === currentValue) {
@@ -64,7 +65,8 @@ const TabSelectorPage = () => {
                     } else {
                       return currentValue;
                     }
-                  })
+                    }
+                  )
                 )
               }
             >
