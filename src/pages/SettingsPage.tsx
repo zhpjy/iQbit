@@ -25,9 +25,12 @@ import {
 } from "@chakra-ui/react";
 import { smartMap } from "../utils/smartMap";
 import WebUIPage from "../components/settings/WebUI/WebUIPage";
+import { SettingsProvider } from "../components/settings/useSettings";
 import DownloadsPage from "../components/settings/Downloads/DownloadsPage";
+import SaveAndResetButtons from "../components/settings/SaveAndResetButtons";
 import ConnectionPage from "../components/settings/Connection/ConnectionPage";
 import SpeedPage from "../components/settings/Speed/SpeedPage";
+import RequestMoreSettings from "../components/settings/RequestMoreSettings";
 import { logout } from "../components/Auth";
 import AllAnnouncementsPage from "../components/settings/AllAnnouncements";
 import SearchPluginsPage from "./SearchPluginsPage";
@@ -37,15 +40,10 @@ import TabSelectorPage from "./TabSelectorPage";
 import { GlassContainer } from "../components/GlassContainer";
 import IntegrationsPage from "./IntegrationsPage";
 import { zhCN } from "../locales/zh-CN";
-import {
-  ConfigProvider,
-  MoreConfigPrompt,
-  SaveResetRow,
-} from "../components/config-kit";
 
-export interface ConfigPageProps {}
+export interface SettingsPageProps {}
 
-type ConfigPageId =
+type SettingsPageId =
   | "download"
   | "connection"
   | "speed"
@@ -60,20 +58,20 @@ type ConfigPageId =
   | "mobileTabs"
   | "integrations";
 
-type ConfigGroupId = "qbtGroup" | "otherGroup";
+type SettingsPageGroup = "qbtGroup" | "otherGroup";
 
-type ConfigViewObject = {
+type SettingsPageObject = {
   title: string;
   icon: ReactElement;
   component: ReactElement;
   color: string;
-  group: ConfigGroupId;
+  group: SettingsPageGroup;
   mobileOnly?: boolean;
 };
 
 const iconSize = 20;
 
-const configViews: Record<ConfigPageId, ConfigViewObject> = {
+const SettingsPages: Record<SettingsPageId, SettingsPageObject> = {
   download: {
     title: "Download",
     icon: <IoDownload size={iconSize} />,
@@ -98,14 +96,14 @@ const configViews: Record<ConfigPageId, ConfigViewObject> = {
   bitTorrent: {
     title: "BitTorrent",
     icon: <IoGitCompare size={iconSize} />,
-    component: <MoreConfigPrompt />,
+    component: <RequestMoreSettings />,
     color: "blue.500",
     group: "qbtGroup",
   },
   rss: {
     title: "RSS",
     icon: <IoLogoRss size={iconSize} />,
-    component: <MoreConfigPrompt />,
+    component: <RequestMoreSettings />,
     color: "orange.500",
     group: "qbtGroup",
   },
@@ -119,7 +117,7 @@ const configViews: Record<ConfigPageId, ConfigViewObject> = {
   advanced: {
     title: "Advanced",
     icon: <IoCog size={iconSize} />,
-    component: <MoreConfigPrompt />,
+    component: <RequestMoreSettings />,
     color: "gray.800",
     group: "qbtGroup",
   },
@@ -171,16 +169,16 @@ const configViews: Record<ConfigPageId, ConfigViewObject> = {
   },
 };
 
-const ConfigHeader = ({
+const SettingsHeader = ({
   title,
-  onReturnPress,
+  onBackButtonPress,
 }: {
   title: string;
-  onReturnPress?: () => void;
+  onBackButtonPress?: () => void;
 }) => {
   const isLarge = useIsLargeScreen();
 
-  if (!onReturnPress) {
+  if (!onBackButtonPress) {
     return (
       <Heading size={isLarge ? "xl" : "3xl"} mt={isLarge ? 0 : 5} mb={5}>
         {title}
@@ -206,7 +204,7 @@ const ConfigHeader = ({
           variant={"unstyled"}
           display={"flex"}
           alignItems={"center"}
-          onClick={onReturnPress}
+          onClick={onBackButtonPress}
           color={"text"}
           _groupActive={{
             transform: "scale(1.15)",
@@ -214,9 +212,7 @@ const ConfigHeader = ({
             background: "transparent",
           }}
         >
-          <Box as="span" display={"inline-flex"} transform={"rotate(180deg)"}>
-            <IoChevronForward size={18} />
-          </Box>
+          <IoChevronForward size={18} style={{ transform: "rotate(180deg)" }} />
           {zhCN.common.back}
         </Button>
       </GlassContainer>
@@ -227,21 +223,21 @@ const ConfigHeader = ({
   );
 };
 
-const ConfigPage = () => {
+const SettingsPage = () => {
   const isLarge = useIsLargeScreen();
-  const [page, setPage] = useState<ConfigPageId>();
+  const [page, setPage] = useState<SettingsPageId>();
   const mobileButtonBg = useColorModeValue("white", "gray.900");
 
   return (
-    <ConfigProvider>
-      <ConfigHeader
-        title={page ? configViews[page].title : zhCN.settings.title}
-        onReturnPress={page ? () => setPage(undefined) : undefined}
+    <SettingsProvider>
+      <SettingsHeader
+        title={page ? SettingsPages[page].title : zhCN.settings.title}
+        onBackButtonPress={page ? () => setPage(undefined) : undefined}
       />
       <Flex minH={"100%"} flexDirection={"column"}>
         {!!page && (
           <Box flexGrow={2} pt={isLarge ? 0 : 24}>
-            {configViews[page].component}
+            {SettingsPages[page].component}
           </Box>
         )}
         {!page &&
@@ -254,7 +250,7 @@ const ConfigPage = () => {
                 justifyContent={"flex-start"}
                 templateColumns={"repeat( auto-fit, minmax(150px, 1fr) )"}
               >
-                {Object.entries(configViews).map(
+                {Object.entries(SettingsPages).map(
                   ([pageId, { icon, mobileOnly, title }]) =>
                     !mobileOnly && (
                       <Button
@@ -266,7 +262,7 @@ const ConfigPage = () => {
                         key={pageId}
                         p={4}
                         height={"100%"}
-                        onClick={() => setPage(pageId as ConfigPageId)}
+                        onClick={() => setPage(pageId as SettingsPageId)}
                         colorScheme={"blue"}
                       >
                         {icon}
@@ -280,7 +276,7 @@ const ConfigPage = () => {
             <Box flexGrow={2}>
               <Flex mt={4} flexDirection={"column"}>
                 {smartMap(
-                  Object.entries(configViews),
+                  Object.entries(SettingsPages),
                   (
                     [pageId, { icon, color, group, title }],
                     { isFirst, isLast, prevItem, nextItem }
@@ -305,10 +301,10 @@ const ConfigPage = () => {
                           variant={"outline"}
                           justifyContent={"space-between"}
                           flexGrow={2}
-                        px={4}
-                        py={3}
-                        height={"100%"}
-                          onClick={() => setPage(pageId as ConfigPageId)}
+                          px={4}
+                          py={3}
+                          height={"100%"}
+                          onClick={() => setPage(pageId as SettingsPageId)}
                           rounded={0}
                           roundedTop={groupFirst ? "lg" : undefined}
                           roundedBottom={groupLast ? "lg" : undefined}
@@ -316,7 +312,6 @@ const ConfigPage = () => {
                           border={"none"}
                           borderTop={groupFirst ? 0 : "1px"}
                           borderTopColor={"grayAlpha.300"}
-                          key={pageId}
                         >
                           <Flex as={"span"} alignItems={"center"}>
                             <Box
@@ -340,7 +335,7 @@ const ConfigPage = () => {
               </Flex>
             </Box>
           ))}
-        <SaveResetRow />
+        <SaveAndResetButtons />
       </Flex>
 
       {!isLarge && !page && (
@@ -353,8 +348,8 @@ const ConfigPage = () => {
           {zhCN.nav.logout}
         </Button>
       )}
-    </ConfigProvider>
+    </SettingsProvider>
   );
 };
 
-export default ConfigPage;
+export default SettingsPage;

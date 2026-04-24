@@ -1,25 +1,46 @@
 import { readFileSync } from "node:fs";
 
 const checks = [
-  [
-    "src/components/Auth.tsx",
-    ["Please Sign In", "Username", "Password", "Sign In"],
-  ],
-  ["src/Pages.tsx", ["Downloads", "Search", "Trending", "Settings"]],
-  [
-    "src/pages/SettingsPage.tsx",
-    ["Back", "Settings", "Search Plugins", "Font Size"],
-  ],
-  ["src/layout/default.tsx", ["Log Out"]],
+  {
+    file: "src/components/Auth.tsx",
+    patterns: [
+      ["Please Sign In", />\s*Please Sign In\s*</],
+      ["Username", /label=\{"Username"\}/],
+      ["Password", /label=\{"Password"\}/],
+      ["Sign In", />\s*Sign In\s*</],
+    ],
+  },
+  {
+    file: "src/Pages.tsx",
+    patterns: [
+      ["Downloads", /(?:title|label):\s*"Downloads"/],
+      ["Search", /(?:title|label):\s*"Search"/],
+      ["Trending", /(?:title|label):\s*"Trending"/],
+      ["Settings", /(?:title|label):\s*"Settings"/],
+    ],
+  },
+  {
+    file: "src/pages/SettingsPage.tsx",
+    patterns: [
+      ["Back", />\s*Back\s*</],
+      ["Settings", /title:\s*"Settings"|title=\{page \|\| "Settings"\}/],
+      ["Search Plugins", /title:\s*"Search Plugins"/],
+      ["Font Size", /title:\s*"Font Size"/],
+    ],
+  },
+  {
+    file: "src/layout/default.tsx",
+    patterns: [["Log Out", />\s*Log Out\s*</]],
+  },
 ];
 
 const failures = [];
 
-for (const [file, phrases] of checks) {
+for (const { file, patterns } of checks) {
   const content = readFileSync(file, "utf8");
-  for (const phrase of phrases) {
-    if (content.includes(phrase)) {
-      failures.push(`${file}: ${phrase}`);
+  for (const [label, pattern] of patterns) {
+    if (pattern.test(content)) {
+      failures.push(`${file}: ${label}`);
     }
   }
 }

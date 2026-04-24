@@ -1,22 +1,35 @@
 import React, { ReactElement, ReactNode } from "react";
-import { zhCN } from "./locales/zh-CN";
+import Home from "./pages/Home";
 import {
-  CategoryView,
-  ConfigView,
-  MainView,
-  PluginView,
-  QueryView,
-  SizeView,
-  TabsView,
-  TrendView,
-} from "./pageViews";
-import { pageIcons } from "./page-icons";
+  IoCog,
+  IoCogOutline,
+  IoDownload,
+  IoDownloadOutline,
+  IoExtensionPuzzle,
+  IoExtensionPuzzleOutline,
+  IoPricetags,
+  IoPricetagsOutline,
+  IoSearch,
+  IoSearchOutline,
+  IoText,
+  IoTextOutline,
+  IoTrendingUp,
+  IoTrendingUpOutline,
+} from "react-icons/io5";
+import { zhCN } from "./locales/zh-CN";
+import SearchPage from "./pages/SearchPage";
+import CategoriesPage from "./pages/CategoriesPage";
+import SettingsPage from "./pages/SettingsPage";
+import SearchPluginsPage from "./pages/SearchPluginsPage";
+import TrendingPage from "./pages/TrendingPage";
+import FontSizeSelection from "./pages/FontSizeSelection";
+import TabSelectorPage from "./pages/TabSelectorPage";
 
 export type PageNames =
   | "sideNav"
   | "bottomNav"
   | "sideNavBottom"
-  | "mobileConfigList"
+  | "mobileSettingsList"
   | "tabSelector";
 
 export type PageId =
@@ -43,14 +56,14 @@ type PageObject = {
 };
 
 const legacyPageLabelToId: Record<string, PageId> = {
-  [["Down", "loads"].join("")]: "downloads",
-  [["Sea", "rch"].join("")]: "search",
-  [["Trend", "ing"].join("")]: "trending",
-  [["Catego", "ries"].join("")]: "categories",
-  [["Font", " Size"].join("")]: "fontSize",
-  [["Set", "tings"].join("")]: "settings",
-  [["Sea", "rch Plugins"].join("")]: "searchPlugins",
-  [["Tab", " Selector"].join("")]: "tabSelector",
+  Downloads: "downloads",
+  Search: "search",
+  Trending: "trending",
+  Categories: "categories",
+  "Font Size": "fontSize",
+  Settings: "settings",
+  "Search Plugins": "searchPlugins",
+  "Tab Selector": "tabSelector",
 };
 
 export const normalizePageId = (
@@ -72,72 +85,99 @@ export const Pages: PageObject[] = [
     id: "downloads",
     title: zhCN.nav.downloads,
     url: "/",
-    component: <MainView />,
-    Icon: pageIcons.download,
+    component: <Home />,
+    Icon: {
+      active: (props) => <IoDownload {...props} />,
+      inactive: (props) => <IoDownloadOutline {...props} />,
+    },
     visibleOn: ["bottomNav"],
   },
   {
     id: "search",
     title: zhCN.nav.search,
     url: "/search",
-    component: <QueryView />,
-    Icon: pageIcons.query,
+    component: <SearchPage />,
+    Icon: {
+      active: (props) => <IoSearch {...props} />,
+      inactive: (props) => <IoSearchOutline {...props} />,
+    },
     visibleOn: ["bottomNav", "sideNav", "tabSelector"],
   },
   {
     id: "trending",
     title: zhCN.nav.trending,
     url: "/trending",
-    component: <TrendView />,
-    Icon: pageIcons.trend,
+    component: <TrendingPage />,
+    Icon: {
+      active: (props) => <IoTrendingUp {...props} />,
+      inactive: (props) => <IoTrendingUpOutline {...props} />,
+    },
     visibleOn: ["bottomNav", "sideNav", "tabSelector"],
   },
   {
     id: "search",
     title: zhCN.nav.search,
     url: "/search/:query",
-    component: <QueryView />,
-    Icon: pageIcons.query,
+    component: <SearchPage />,
+    Icon: {
+      active: (props) => <IoSearch {...props} />,
+      inactive: (props) => <IoSearchOutline {...props} />,
+    },
     visibleOn: [],
   },
   {
     id: "categories",
     title: zhCN.nav.categories,
     url: "/categories",
-    component: <CategoryView />,
-    Icon: pageIcons.category,
-    visibleOn: ["sideNavBottom", "mobileConfigList", "tabSelector"],
+    component: <CategoriesPage />,
+    Icon: {
+      active: (props) => <IoPricetags {...props} />,
+      inactive: (props) => <IoPricetagsOutline {...props} />,
+    },
+    visibleOn: ["sideNavBottom", "mobileSettingsList", "tabSelector"],
   },
   {
     id: "fontSize",
     title: zhCN.nav.fontSize,
     url: "/font-size",
-    component: <SizeView />,
-    Icon: pageIcons.size,
+    component: <FontSizeSelection />,
+    Icon: {
+      active: (props) => <IoText {...props} />,
+      inactive: (props) => <IoTextOutline {...props} />,
+    },
     visibleOn: ["sideNavBottom"],
   },
   {
     id: "settings",
     title: zhCN.nav.settings,
     url: "/settings",
-    component: <ConfigView />,
-    Icon: pageIcons.config,
+    component: <SettingsPage />,
+    Icon: {
+      active: (props) => <IoCog {...props} />,
+      inactive: (props) => <IoCogOutline {...props} />,
+    },
     visibleOn: ["bottomNav", "sideNavBottom"],
   },
   {
     id: "searchPlugins",
     title: zhCN.nav.searchPlugins,
     url: "/plugins",
-    component: <PluginView />,
-    Icon: pageIcons.plugin,
-    visibleOn: ["mobileConfigList", "sideNav"],
+    component: <SearchPluginsPage />,
+    Icon: {
+      active: (props) => <IoExtensionPuzzle {...props} />,
+      inactive: (props) => <IoExtensionPuzzleOutline {...props} />,
+    },
+    visibleOn: ["mobileSettingsList", "sideNav"],
   },
   {
     id: "tabSelector",
     title: zhCN.nav.tabSelector,
     url: "/tab-selector",
-    component: <TabsView />,
-    Icon: pageIcons.plugin,
-    visibleOn: ["mobileConfigList"],
+    component: <TabSelectorPage />,
+    Icon: {
+      active: (props) => <IoExtensionPuzzle {...props} />,
+      inactive: (props) => <IoExtensionPuzzleOutline {...props} />,
+    },
+    visibleOn: ["mobileSettingsList"],
   },
 ];
