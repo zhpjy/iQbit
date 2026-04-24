@@ -4,51 +4,52 @@ import SettingsSwitch from "../Inputs/SettingsSwitch";
 import SettingsTextInput from "../Inputs/SettingsTextInput";
 import {Flex} from "@chakra-ui/react";
 import {useSettingsCtx} from "../useSettings";
+import { zhCN } from "../../../locales/zh-CN";
 
 const SavingManagement = () => {
   const { settings } = useSettingsCtx();
 
   return (
     <>
-      <SettingsBox title={"Saving Management"}>
+      <SettingsBox title={zhCN.downloads.savingManagement}>
         <SettingsSwitch
-          label={"Use Automatic Torrent Management Mode"}
+          label={zhCN.downloads.autoManagement}
           settingKey={"auto_tmm_enabled"}
         />
         <SettingsSwitch
-          label={"Relocate Torrent on Category Change"}
+          label={"分类变更时重新定位种子"}
           settingKey={"torrent_changed_tmm_enabled"}
         />
         <SettingsSwitch
-          label={"Relocate Torrent on Default Save Path Change"}
+          label={"默认保存路径变更时重新定位种子"}
           settingKey={"save_path_changed_tmm_enabled"}
         />
         <SettingsSwitch
-          label={"Relocate Torrent on Category Save Path Change"}
+          label={"分类保存路径变更时重新定位种子"}
           settingKey={"category_changed_tmm_enabled"}
         />
         <SettingsTextInput
-          label={"Default Save Path"}
+          label={zhCN.downloads.defaultSavePath}
           settingKey={"save_path"}
         />
         <Flex gap={3}>
           <SettingsSwitch
             labelAbove
-            label={"Ue Temp Folder"}
+            label={zhCN.downloads.keepIncompleteFolder}
             settingKey={"temp_path_enabled"}
           />
           <SettingsTextInput
-            label={"Temporary Folder for Incomplete Files"}
+            label={zhCN.downloads.incompleteFolder}
             settingKey={"temp_path"}
             disabled={!settings?.temp_path_enabled}
           />
         </Flex>
         <SettingsTextInput
-          label={"Copy .torrent files to"}
+          label={"复制 .torrent 文件到"}
           settingKey={"export_dir"}
         />
         <SettingsTextInput
-          label={"Copy .torrent files for finished downlads to"}
+          label={"将已完成下载的 .torrent 文件复制到"}
           settingKey={"export_dir_fin"}
         />
       </SettingsBox>

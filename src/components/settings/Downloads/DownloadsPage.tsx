@@ -4,6 +4,7 @@ import SettingsSwitch from "../Inputs/SettingsSwitch";
 import SettingsBox from "../SettingsBox";
 import SavingManagement from "./SavingManagement";
 import RequestMoreSettings from "../RequestMoreSettings";
+import { zhCN } from "../../../locales/zh-CN";
 
 export interface DownloadsPageProps {}
 
@@ -13,11 +14,11 @@ const DownloadsPage = (props: DownloadsPageProps) => {
       <WhenAddingTorrent />
       <SettingsBox>
         <SettingsSwitch
-          label={"Pre-allocate disk space for all files"}
+          label={zhCN.downloads.preAllocation}
           settingKey={"preallocate_all"}
         />
         <SettingsSwitch
-          label={"Append .!qB extension to incomplete files"}
+          label={zhCN.downloads.autoDeleteDeprecated}
           settingKey={"incomplete_files_ext"}
         />
       </SettingsBox>

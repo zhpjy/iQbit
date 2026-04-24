@@ -4,64 +4,65 @@ import { Flex, Heading, SimpleGrid, Text } from "@chakra-ui/react";
 import SettingsTextInput from "../Inputs/SettingsTextInput";
 import SettingsSwitch from "../Inputs/SettingsSwitch";
 import React from "react";
+import { zhCN } from "../../../locales/zh-CN";
 
 export function AlternativeRateLimits(props: {
   options: SettingsSelectOption[];
 }) {
   return (
-    <SettingsBox title={"Alternative Rate Limits"}>
-      <Text>0 means unlimited</Text>
+    <SettingsBox title={zhCN.settingsLabels.alternativeRateLimits}>
+      <Text>{zhCN.settingsLabels.zeroMeansUnlimited}</Text>
       <SimpleGrid columns={{ base: 1, lg: 2 }} gap={6}>
         <SettingsTextInput
-          label={"Upload"}
+          label={zhCN.settingsLabels.upload}
           settingKey={"alt_up_limit"}
-          rightAddon={"KiB/s"}
+          rightAddon={zhCN.speedUnits.kibs}
         />
         <SettingsTextInput
-          label={"Download"}
+          label={zhCN.settingsLabels.download}
           settingKey={"alt_dl_limit"}
-          rightAddon={"KiB/s"}
+          rightAddon={zhCN.speedUnits.kibs}
         />
       </SimpleGrid>
-      <SettingsBox title={"Schedule Alternative Limit"}>
+      <SettingsBox title={zhCN.settingsLabels.scheduleAlternativeLimit}>
         <SettingsSwitch
-          label={"Enable Alternative Rate Limit Scheduler"}
+          label={zhCN.settingsLabels.enableAlternativeRateLimitScheduler}
           settingKey={"scheduler_enabled"}
         />
         <SimpleGrid columns={{ base: 1, lg: 2 }} gap={5}>
           <Flex flexDirection={"column"}>
-            <Heading size={"md"}>From</Heading>
+            <Heading size={"md"}>{zhCN.settingsLabels.from}</Heading>
             <SimpleGrid columns={2} gap={5}>
               <SettingsTextInput
                 label={""}
                 settingKey={"schedule_from_hour"}
-                rightAddon={"h"}
+                rightAddon={zhCN.timeUnits.hour}
               />
               <SettingsTextInput
                 label={""}
                 settingKey={"schedule_from_min"}
-                rightAddon={"min"}
+                rightAddon={zhCN.timeUnits.min}
               />
             </SimpleGrid>
           </Flex>
           <Flex flexDirection={"column"}>
-            <Heading size={"md"}>To</Heading>
+            <Heading size={"md"}>{zhCN.settingsLabels.to}</Heading>
             <SimpleGrid columns={2} gap={5}>
               <SettingsTextInput
                 label={""}
                 settingKey={"schedule_to_hour"}
-                rightAddon={"h"}
+                rightAddon={zhCN.timeUnits.hour}
               />
               <SettingsTextInput
                 label={""}
                 settingKey={"schedule_to_hour"}
-                rightAddon={"min"}
+                rightAddon={zhCN.timeUnits.min}
               />
             </SimpleGrid>
           </Flex>
         </SimpleGrid>
         <SettingsSelect
-          label={"When"}
+          label={zhCN.settingsLabels.when}
           settingKey={"scheduler_days"}
           options={props.options}
         />

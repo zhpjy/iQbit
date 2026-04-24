@@ -6,6 +6,7 @@ import SettingsTextInput from "../Inputs/SettingsTextInput";
 import { Flex } from "@chakra-ui/react";
 import SettingsSwitch from "../Inputs/SettingsSwitch";
 import { useSettingsCtx } from "../useSettings";
+import { zhCN } from "../../../locales/zh-CN";
 
 const ProxyServer = () => {
   const { settings, updateSetting } = useSettingsCtx();
@@ -21,61 +22,61 @@ const ProxyServer = () => {
 
   const proxyTypeOptions: SettingsSelectOption[] = [
     {
-      label: "None",
+      label: zhCN.proxyTypes.none,
       value: TorrSettingsProxyType.disabled,
     },
     {
-      label: "SOCKS4 (No Auth)",
+      label: zhCN.proxyTypes.socks4NoAuth,
       value: TorrSettingsProxyType.SOCKS4WithoutAuth,
     },
     {
-      label: "SOCKS5 Without Authentication",
+      label: zhCN.proxyTypes.socks5WithoutAuth,
       value: TorrSettingsProxyType.SOCKS5WithoutAuth,
     },
     {
-      label: "SOCKS5 With Authentication",
+      label: zhCN.proxyTypes.socks5WithAuth,
       value: TorrSettingsProxyType.SOCKS5WithAuth,
     },
     {
-      label: "HTTP Without Authentication",
+      label: zhCN.proxyTypes.httpWithoutAuth,
       value: TorrSettingsProxyType.HTTPWithAuth,
     },
     {
-      label: "HTTP With Authentication",
+      label: zhCN.proxyTypes.httpWithAuth,
       value: TorrSettingsProxyType.HTTPWithoutAuth,
     },
   ];
 
   return (
-    <SettingsBox title={"Proxy Server"}>
+    <SettingsBox title={zhCN.settingsLabels.proxyServer}>
       <SettingsSelect
-        label={"Type"}
+        label={zhCN.settingsLabels.type}
         settingKey={"proxy_type"}
         options={proxyTypeOptions}
       />
       {settings?.proxy_type !== TorrSettingsProxyType.disabled && (
         <>
           <Flex gap={3} flexDirection={{ base: "column", lg: "row" }}>
-            <SettingsTextInput label={"Host"} settingKey={"proxy_ip"} />
-            <SettingsTextInput label={"Port"} settingKey={"proxy_port"} />
+            <SettingsTextInput label={zhCN.settingsLabels.host} settingKey={"proxy_ip"} />
+            <SettingsTextInput label={zhCN.settingsLabels.port} settingKey={"proxy_port"} />
           </Flex>
           <SettingsSwitch
-            label={"Use proxy for peer connections"}
+            label={zhCN.settingsLabels.useProxyForPeerConnections}
             settingKey={"proxy_peer_connections"}
           />
           <SettingsSwitch
-            label={"Use proxy only for torrents"}
+            label={zhCN.settingsLabels.useProxyOnlyForTorrents}
             settingKey={"proxy_torrents_only"}
           />
         </>
       )}
       {ProxyWithAuth && (
-        <SettingsBox title={"Authentication"}>
-          <SettingsTextInput label={"Username"} settingKey={"proxy_username"} />
+        <SettingsBox title={zhCN.settingsLabels.authentication}>
+          <SettingsTextInput label={zhCN.settingsLabels.username} settingKey={"proxy_username"} />
           <SettingsTextInput
-            label={"Password"}
+            label={zhCN.settingsLabels.password}
             settingKey={"proxy_password"}
-            helperText={"The password is saved unencrypted"}
+            helperText={zhCN.settingsLabels.passwordSavedUnencrypted}
           />
         </SettingsBox>
       )}

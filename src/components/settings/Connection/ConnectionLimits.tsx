@@ -1,32 +1,33 @@
 import React from "react";
 import SettingsTextInput from "../Inputs/SettingsTextInput";
 import SettingsBox from "../SettingsBox";
+import { zhCN } from "../../../locales/zh-CN";
 
 export interface ConnectionLimitsProps {}
 
 const ConnectionLimits = (props: ConnectionLimitsProps) => {
   return (
-    <SettingsBox title={"Connection Limits"}>
+    <SettingsBox title={zhCN.settingsLabels.connectionLimits}>
       <SettingsTextInput
-        label={"Global Max Connection Limit"}
+        label={zhCN.settingsLabels.globalMaxConnectionLimit}
         settingKey={"max_connec"}
         withToggle
         disableDefaultValue={"500"}
       />
       <SettingsTextInput
-        label={"Max Connection Limit per Torrent"}
+        label={zhCN.settingsLabels.maxConnectionLimitPerTorrent}
         settingKey={"max_connec_per_torrent"}
         withToggle
         disableDefaultValue={"100"}
       />
       <SettingsTextInput
-        label={"Global Max Upload Slots Limit"}
+        label={zhCN.settingsLabels.globalMaxUploadSlotsLimit}
         settingKey={"max_uploads"}
         withToggle
         disableDefaultValue={"20"}
       />
       <SettingsTextInput
-        label={"Max Upload Slots Limit per Torrent"}
+        label={zhCN.settingsLabels.maxUploadSlotsLimitPerTorrent}
         settingKey={"max_uploads"}
         withToggle
         disableDefaultValue={"4"}

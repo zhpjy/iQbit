@@ -7,6 +7,7 @@ import { Link, SimpleGrid } from "@chakra-ui/react";
 import SettingsTextArea from "../Inputs/SettingsTextArea";
 import SettingsSelect, { SettingsSelectOption } from "../Inputs/SettingsSelect";
 import { TorrDynDNSService } from "../../../types";
+import { zhCN } from "../../../locales/zh-CN";
 
 export interface BehaviorPageProps {}
 
@@ -25,25 +26,25 @@ const WebUIPage = (props: BehaviorPageProps) => {
   return (
     <>
       <Language />
-      <SettingsBox title={"Web User Interface"}>
+      <SettingsBox title={zhCN.webui.title}>
         <SimpleGrid columns={{ base: 1, lg: 2 }} gap={5}>
           <SettingsTextInput
-            label={"IP Address"}
+            label={zhCN.settingsLabels.ipAddress}
             settingKey={"web_ui_address"}
           />
-          <SettingsTextInput label={"Port"} settingKey={"web_ui_port"} />
+          <SettingsTextInput label={zhCN.settingsLabels.port} settingKey={"web_ui_port"} />
         </SimpleGrid>
         <SettingsSwitch
-          label={"Use UPnP / NAT-PMP to forward the port from my router"}
+          label={zhCN.settingsLabels.useUpnpPortForwardFromRouter}
           settingKey={"web_ui_upnp"}
         />
-        <SettingsBox title={"Use HTTPS instead of HTTP"}>
+        <SettingsBox title={zhCN.settingsLabels.useHttpsInsteadOfHttp}>
           <SettingsTextInput
-            label={"Certificate Path"}
+            label={zhCN.settingsLabels.certificatePath}
             settingKey={"web_ui_https_cert_path"}
           />
           <SettingsTextInput
-            label={"Key Path"}
+            label={zhCN.settingsLabels.keyPath}
             settingKey={"web_ui_https_key_path"}
             helperText={
               <Link
@@ -54,112 +55,112 @@ const WebUIPage = (props: BehaviorPageProps) => {
                 }
                 rel="noreferrer"
               >
-                Information about certificates
+                {zhCN.settingsLabels.informationAboutCertificates}
               </Link>
             }
           />
         </SettingsBox>
       </SettingsBox>
-      <SettingsBox title={"Authentication"}>
-        <SettingsTextInput label={"Username"} settingKey={"web_ui_username"} />
+      <SettingsBox title={zhCN.settingsLabels.authentication}>
+        <SettingsTextInput label={zhCN.settingsLabels.username} settingKey={"web_ui_username"} />
         <SettingsTextInput
-          label={"Password"}
+          label={zhCN.settingsLabels.password}
           settingKey={"web_ui_password"}
           placeholder={"•••••••••••"}
         />
         <SettingsSwitch
-          label={"Bypass authentication for clients on localhost"}
+          label={zhCN.settingsLabels.bypassAuthenticationForLocalhost}
           settingKey={"bypass_local_auth"}
         />
         <SettingsSwitch
-          label={"Bypass authentication for clients in whitelisted IP subnets"}
+          label={zhCN.settingsLabels.bypassAuthenticationForWhitelistedIPs}
           settingKey={"bypass_auth_subnet_whitelist"}
         />
         <SettingsTextArea
-          label={"Whitelisted IPs"}
+          label={zhCN.settingsLabels.whitelistedIPs}
           settingKey={"bypass_auth_subnet_whitelist"}
           helperText={"Example: 172.17.32.0/24, fdff:ffff:c8::/40"}
         />
         <SettingsTextInput
-          label={"Failed authentication limit before client gets banned"}
+          label={zhCN.settingsLabels.failedAuthenticationLimit}
           settingKey={"web_ui_max_auth_fail_count"}
         />
         <SettingsTextInput
-          label={"Ban Duration"}
+          label={zhCN.settingsLabels.banDuration}
           settingKey={"web_ui_ban_duration"}
         />
         <SettingsTextInput
-          label={"Session Timeout"}
+          label={zhCN.settingsLabels.sessionTimeout}
           settingKey={"web_ui_session_timeout"}
         />
       </SettingsBox>
-      <SettingsBox title={"Custom Web UI"}>
+      <SettingsBox title={zhCN.settingsLabels.customWebUI}>
         <SettingsSwitch
-          label={"Use Alternative Web UI"}
+          label={zhCN.settingsLabels.useAlternativeWebUI}
           settingKey={"alternative_webui_enabled"}
         />
         <SettingsTextInput
-          label={"Alternative Web UI Path"}
+          label={zhCN.settingsLabels.alternativeWebUIPath}
           settingKey={"alternative_webui_path"}
         />
       </SettingsBox>
-      <SettingsBox title={"Security"}>
+      <SettingsBox title={zhCN.settingsLabels.security}>
         <SettingsSwitch
-          label={"Enable clickjacking protection"}
+          label={zhCN.settingsLabels.enableClickjackingProtection}
           settingKey={"web_ui_clickjacking_protection_enabled"}
         />
         <SettingsSwitch
-          label={"Enable Cross-Site Request Forgery (CSRF) protection"}
+          label={zhCN.settingsLabels.enableCsrfProtection}
           settingKey={"web_ui_csrf_protection_enabled"}
         />
         <SettingsSwitch
-          label={"Enable cookie Secure flag (requires HTTPS)"}
+          label={zhCN.settingsLabels.enableCookieSecureFlag}
           settingKey={"web_ui_secure_cookie_enabled"}
         />
-        <SettingsBox title={"Host Header Validation"}>
+        <SettingsBox title={zhCN.settingsLabels.hostHeaderValidation}>
           <SettingsSwitch
-            label={"Enabled"}
+            label={zhCN.settingsLabels.enabled}
             settingKey={"web_ui_host_header_validation_enabled"}
           />
           <SettingsTextInput
-            label={"Server domains"}
+            label={zhCN.settingsLabels.serverDomains}
             settingKey={"web_ui_domain_list"}
           />
         </SettingsBox>
-        <SettingsBox title={"Custom HTTP Headers"}>
+        <SettingsBox title={zhCN.settingsLabels.customHttpHeaders}>
           <SettingsSwitch
-            label={"Enabled"}
+            label={zhCN.settingsLabels.enabled}
             settingKey={"web_ui_use_custom_http_headers_enabled"}
           />
           <SettingsTextArea
-            label={"HTTP Headers"}
+            label={zhCN.settingsLabels.httpHeaders}
             settingKey={"web_ui_custom_http_headers"}
           />
         </SettingsBox>
-        <SettingsBox title={"Reverse Proxy Support"}>
+        <SettingsBox title={zhCN.settingsLabels.reverseProxySupport}>
           <SettingsSwitch
-            label={"Enabled"}
+            label={zhCN.settingsLabels.enabled}
             settingKey={"web_ui_reverse_proxy_enabled"}
           />
           <SettingsTextArea
-            label={"Trusted Proxies List"}
+            label={zhCN.settingsLabels.trustedProxiesList}
             settingKey={"web_ui_reverse_proxies_list"}
           />
         </SettingsBox>
-        <SettingsBox title={"Dynamic DNS"}>
-          <SettingsSwitch label={"Enabled"} settingKey={"dyndns_enabled"} />
+        <SettingsBox title={zhCN.settingsLabels.dynamicDNS}>
+          <SettingsSwitch label={zhCN.settingsLabels.enabled} settingKey={"dyndns_enabled"} />
           <SettingsSelect
-            label={"Dynamic DNS Provider"}
+            label={zhCN.settingsLabels.dynamicDNSProvider}
             settingKey={"dyndns_service"}
             options={dynDNSOptions}
           />
-          <SettingsTextInput label={"Domain"} settingKey={"dyndns_domain"} />
+          <SettingsTextInput label={zhCN.settingsLabels.domain} settingKey={"dyndns_domain"} />
           <SettingsTextInput
-            label={"Username"}
+            label={zhCN.settingsLabels.username}
             settingKey={"dyndns_username"}
           />
           <SettingsTextInput
-            label={"Password"}
+            label={zhCN.settingsLabels.password}
             settingKey={"dyndns_password"}
           />
         </SettingsBox>
