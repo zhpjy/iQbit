@@ -7,23 +7,25 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { PageId, Pages, normalizePageId } from "../Pages";
+import { Pages, TabPageId, normalizeTabPageId } from "../Pages";
 import { useLocalStorage } from "usehooks-ts";
 
-export const defaultTabs: PageId[] = ["trending", "search"];
+export const defaultTabs: TabPageId[] = ["trending", "search"];
 
 const TabSelectorPage = () => {
   const bgColor = useColorModeValue("white", "gray.900");
-  const [storedTabs, setTabs] = useLocalStorage<(PageId | "")[]>(
+  const [storedTabs, setTabs] = useLocalStorage<(TabPageId | "")[]>(
     "tabs-v2",
     defaultTabs
   );
-  const tabs = storedTabs.map((tab) => normalizePageId(tab) || "");
+  const tabs = storedTabs.map((tab) => normalizeTabPageId(tab) || "");
 
   return (
     <Flex flexDirection={"column"} gap={4}>
       {Pages.map((page) => {
-        if (!page.visibleOn.includes("tabSelector")) {
+        const tabPageId = normalizeTabPageId(page.id);
+
+        if (!page.visibleOn.includes("tabSelector") || !tabPageId) {
           return null;
         }
 
@@ -45,19 +47,19 @@ const TabSelectorPage = () => {
               border={"none"}
               textAlign={"right"}
               pr={2}
-              value={tabs.indexOf(page.id)}
-              opacity={tabs.indexOf(page.id) === -1 ? 0.5 : 1}
+              value={tabs.indexOf(tabPageId)}
+              opacity={tabs.indexOf(tabPageId) === -1 ? 0.5 : 1}
               onChange={(e) =>
                 setTabs((curr) =>
                   curr.map((value, index) => {
-                    const currentValue = normalizePageId(value) || "";
+                    const currentValue = normalizeTabPageId(value) || "";
 
-                    if (e.target.value === "-1" && page.id === currentValue) {
+                    if (e.target.value === "-1" && tabPageId === currentValue) {
                       return "";
                     }
 
                     if (index.toString() === e.target.value) {
-                      return page.id;
+                      return tabPageId;
                     } else {
                       return currentValue;
                     }

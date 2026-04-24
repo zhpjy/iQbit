@@ -42,8 +42,8 @@ export const logout = async () => {
 };
 
 export const AuthView = () => {
-  const [accountName, setAccountName] = useState("");
-  const [secret, setSecret] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const { handleLogin, formError } = useLogin();
 
@@ -60,23 +60,23 @@ export const AuthView = () => {
             isInvalid={!!formError}
             onSubmit={(e) => {
               e.preventDefault();
-              handleLogin({ username: accountName, password: secret });
+              handleLogin({ username, password });
             }}
           >
             <IosInput
               label={zhCN.auth.username}
               labelWidth={105}
               first
-              value={accountName}
-              onChange={setAccountName}
+              value={username}
+              onChange={setUsername}
             />
             <IosInput
               label={zhCN.auth.password}
               password
               labelWidth={105}
               last
-              value={secret}
-              onChange={setSecret}
+              value={password}
+              onChange={setPassword}
             />
             <FormErrorMessage>{formError}</FormErrorMessage>
             <Button
@@ -85,9 +85,7 @@ export const AuthView = () => {
               variant={"ghost"}
               mt={20}
               type={"submit"}
-              onClick={() =>
-                handleLogin({ username: accountName, password: secret })
-              }
+              onClick={() => handleLogin({ username, password })}
             >
               {zhCN.auth.signIn}
             </Button>

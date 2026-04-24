@@ -35,12 +35,32 @@ export type PageNames =
 export type PageId =
   | "downloads"
   | "search"
+  | "searchQuery"
   | "trending"
   | "categories"
   | "fontSize"
   | "settings"
   | "searchPlugins"
   | "tabSelector";
+
+export type TabPageId = "search" | "trending" | "categories";
+
+const pageIds: PageId[] = [
+  "downloads",
+  "search",
+  "searchQuery",
+  "trending",
+  "categories",
+  "fontSize",
+  "settings",
+  "searchPlugins",
+  "tabSelector",
+];
+
+const tabPageIds: TabPageId[] = ["search", "trending", "categories"];
+
+const pageIdSet = new Set<PageId>(pageIds);
+const tabPageIdSet = new Set<TabPageId>(tabPageIds);
 
 type PageObject = {
   id: PageId;
@@ -73,11 +93,25 @@ export const normalizePageId = (
     return undefined;
   }
 
-  if (value in legacyPageLabelToId) {
-    return legacyPageLabelToId[value];
+  const normalizedValue = legacyPageLabelToId[value] ?? value;
+
+  if (pageIdSet.has(normalizedValue as PageId)) {
+    return normalizedValue as PageId;
   }
 
-  return value as PageId;
+  return undefined;
+};
+
+export const normalizeTabPageId = (
+  value?: string | null
+): TabPageId | undefined => {
+  const normalizedValue = normalizePageId(value);
+
+  if (normalizedValue && tabPageIdSet.has(normalizedValue as TabPageId)) {
+    return normalizedValue as TabPageId;
+  }
+
+  return undefined;
 };
 
 export const Pages: PageObject[] = [
@@ -115,7 +149,7 @@ export const Pages: PageObject[] = [
     visibleOn: ["bottomNav", "sideNav", "tabSelector"],
   },
   {
-    id: "search",
+    id: "searchQuery",
     title: zhCN.nav.search,
     url: "/search/:query",
     component: <SearchPage />,

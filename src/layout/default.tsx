@@ -11,7 +11,7 @@ import {
 import NavButton from "../components/buttons/NavButton";
 import { IconBaseProps } from "react-icons";
 import { useIsLargeScreen } from "../utils/screenSize";
-import { PageId, Pages, normalizePageId } from "../Pages";
+import { Pages, TabPageId, normalizeTabPageId } from "../Pages";
 import Home from "../pages/Home";
 import { NavLink, useLocation } from "react-router-dom";
 import useScrollPosition from "../hooks/useScrollPosition";
@@ -56,17 +56,25 @@ const DefaultLayout = (props: PropsWithChildren<DefaultLayoutProps>) => {
 
   const largeWorkAreaBgColor = useColorModeValue("white", "gray.900");
 
-  const storedTabs = useReadLocalStorage<(PageId | "")[]>("tabs-v2");
+  const storedTabs = useReadLocalStorage<(TabPageId | "")[]>("tabs-v2");
   const tabsSelected =
-    storedTabs?.map((tab) => normalizePageId(tab) || "") ?? defaultTabs;
+    storedTabs?.map((tab) => normalizeTabPageId(tab) || "") ?? defaultTabs;
 
   const middleTab = tabsSelected[0] || "trending";
   const rightTab = tabsSelected[1] || "search";
 
-  const DownloadsPage = Pages.find((page) => page.id === "downloads")!;
-  const SettingsPage = Pages.find((page) => page.id === "settings")!;
-  const MiddleTab = Pages.find((page) => page.id === middleTab)!;
-  const RightTab = Pages.find((page) => page.id === rightTab)!;
+  const downloadsPage = Pages.find((page) => page.id === "downloads");
+  const settingsPage = Pages.find((page) => page.id === "settings");
+  const middleTabPage =
+    Pages.find((page) => page.id === middleTab) ||
+    Pages.find((page) => page.id === "trending");
+  const rightTabPage =
+    Pages.find((page) => page.id === rightTab) ||
+    Pages.find((page) => page.id === "search");
+
+  if (!downloadsPage || !settingsPage || !middleTabPage || !rightTabPage) {
+    return null;
+  }
 
   return (
     <Box px={5} pb={100}>
@@ -192,7 +200,7 @@ const DefaultLayout = (props: PropsWithChildren<DefaultLayoutProps>) => {
             overflow={"visible"}
           >
             <Flex as={"nav"} width={"100%"}>
-              {[DownloadsPage, MiddleTab, SettingsPage].map(
+              {[downloadsPage, middleTabPage, settingsPage].map(
                 ({ url, Icon, title }) => {
                   return (
                     <NavButton
@@ -216,13 +224,13 @@ const DefaultLayout = (props: PropsWithChildren<DefaultLayoutProps>) => {
           <GlassContainer rounded={"100%"} h={16} aspectRatio={"1 / 1"} noTint>
             <NavButton
               {...sharedNavButtonProps}
-              path={RightTab.url}
+              path={rightTabPage.url}
               icon={{
-                active: RightTab.Icon.active({
+                active: rightTabPage.Icon.active({
                   ...activeIconProps,
                   ...iconProps,
                 }),
-                inactive: RightTab.Icon.inactive({ ...iconProps }),
+                inactive: rightTabPage.Icon.inactive({ ...iconProps }),
               }}
               label={""}
             />
