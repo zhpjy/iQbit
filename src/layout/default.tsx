@@ -11,7 +11,7 @@ import {
 import NavButton from "../components/buttons/NavButton";
 import { IconBaseProps } from "react-icons";
 import { useIsLargeScreen } from "../utils/screenSize";
-import { PageLabels, Pages } from "../Pages";
+import { PageId, Pages, normalizePageId } from "../Pages";
 import Home from "../pages/Home";
 import { NavLink, useLocation } from "react-router-dom";
 import useScrollPosition from "../hooks/useScrollPosition";
@@ -22,6 +22,7 @@ import { useReadLocalStorage } from "usehooks-ts";
 import { defaultTabs } from "../pages/TabSelectorPage";
 import { GlassContainer } from "../components/GlassContainer";
 import { useIsPWA } from "../hooks/useIsPWA";
+import { zhCN } from "../locales/zh-CN";
 
 export interface DefaultLayoutProps {}
 
@@ -55,16 +56,17 @@ const DefaultLayout = (props: PropsWithChildren<DefaultLayoutProps>) => {
 
   const largeWorkAreaBgColor = useColorModeValue("white", "gray.900");
 
-  const storedTabs = useReadLocalStorage<(PageLabels | "")[]>("tabs-v2");
-  const tabsSelected = storedTabs ?? defaultTabs;
+  const storedTabs = useReadLocalStorage<(PageId | "")[]>("tabs-v2");
+  const tabsSelected =
+    storedTabs?.map((tab) => normalizePageId(tab) || "") ?? defaultTabs;
 
-  const middleTab = tabsSelected[0] || "Trending";
-  const rightTab = tabsSelected[1] || "Search";
+  const middleTab = tabsSelected[0] || "trending";
+  const rightTab = tabsSelected[1] || "search";
 
-  const DownloadsPage = Pages.find((page) => page.label === "Downloads")!;
-  const SettingsPage = Pages.find((page) => page.label === "Settings")!;
-  const MiddleTab = Pages.find((page) => page.label === middleTab)!;
-  const RightTab = Pages.find((page) => page.label === rightTab)!;
+  const DownloadsPage = Pages.find((page) => page.id === "downloads")!;
+  const SettingsPage = Pages.find((page) => page.id === "settings")!;
+  const MiddleTab = Pages.find((page) => page.id === middleTab)!;
+  const RightTab = Pages.find((page) => page.id === rightTab)!;
 
   return (
     <Box px={5} pb={100}>
@@ -105,7 +107,7 @@ const DefaultLayout = (props: PropsWithChildren<DefaultLayoutProps>) => {
                 gap={2}
               >
                 {Pages.filter((page) => page.visibleOn.includes("sideNav")).map(
-                  ({ url, Icon, label }) => (
+                  ({ url, Icon, title }) => (
                     <NavButton
                       key={url}
                       {...sharedNavButtonProps}
@@ -117,7 +119,7 @@ const DefaultLayout = (props: PropsWithChildren<DefaultLayoutProps>) => {
                         }),
                         inactive: Icon.inactive({ ...iconProps }),
                       }}
-                      label={label}
+                      label={title}
                     />
                   )
                 )}
@@ -129,7 +131,7 @@ const DefaultLayout = (props: PropsWithChildren<DefaultLayoutProps>) => {
               >
                 {Pages.filter((page) =>
                   page.visibleOn.includes("sideNavBottom")
-                ).map(({ url, Icon, label }) => (
+                ).map(({ url, Icon, title }) => (
                   <NavButton
                     key={url}
                     {...sharedNavButtonProps}
@@ -141,7 +143,7 @@ const DefaultLayout = (props: PropsWithChildren<DefaultLayoutProps>) => {
                       }),
                       inactive: Icon.inactive({ ...iconProps }),
                     }}
-                    label={label}
+                    label={title}
                   />
                 ))}
                 <Divider my={2} />
@@ -154,7 +156,7 @@ const DefaultLayout = (props: PropsWithChildren<DefaultLayoutProps>) => {
                   textAlign={"left"}
                   onClick={logout}
                 >
-                  Log Out
+                  {zhCN.nav.logout}
                 </Button>
               </Flex>
             </Flex>
@@ -167,7 +169,7 @@ const DefaultLayout = (props: PropsWithChildren<DefaultLayoutProps>) => {
               overflowX={"hidden"}
             >
               {pathname === "/"
-                ? Pages.filter((page) => page.label === "Search")[0].component
+                ? Pages.find((page) => page.id === "search")?.component
                 : props.children}
             </Flex>
           </Flex>
@@ -191,7 +193,7 @@ const DefaultLayout = (props: PropsWithChildren<DefaultLayoutProps>) => {
           >
             <Flex as={"nav"} width={"100%"}>
               {[DownloadsPage, MiddleTab, SettingsPage].map(
-                ({ url, Icon, label }) => {
+                ({ url, Icon, title }) => {
                   return (
                     <NavButton
                       key={url}
@@ -204,7 +206,7 @@ const DefaultLayout = (props: PropsWithChildren<DefaultLayoutProps>) => {
                         }),
                         inactive: Icon.inactive({ ...iconProps }),
                       }}
-                      label={label}
+                      label={title}
                     />
                   );
                 }

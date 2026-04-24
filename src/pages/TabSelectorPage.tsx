@@ -7,17 +7,18 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { PageLabels, Pages } from "../Pages";
+import { PageId, Pages, normalizePageId } from "../Pages";
 import { useLocalStorage } from "usehooks-ts";
 
-export const defaultTabs: PageLabels[] = ["Trending", "Search"];
+export const defaultTabs: PageId[] = ["trending", "search"];
 
 const TabSelectorPage = () => {
   const bgColor = useColorModeValue("white", "gray.900");
-  const [tabs, setTabs] = useLocalStorage<(PageLabels | "")[]>("tabs-v2", [
-    "Search",
-    "Trending",
-  ]);
+  const [storedTabs, setTabs] = useLocalStorage<(PageId | "")[]>(
+    "tabs-v2",
+    defaultTabs
+  );
+  const tabs = storedTabs.map((tab) => normalizePageId(tab) || "");
 
   return (
     <Flex flexDirection={"column"} gap={4}>
@@ -38,32 +39,34 @@ const TabSelectorPage = () => {
           >
             {page.Icon.inactive({ size: 45 })}
             <Heading w={"full"} size={"md"} ml={4}>
-              {page.label}
+              {page.title}
             </Heading>
             <Select
               border={"none"}
               textAlign={"right"}
               pr={2}
-              value={tabs.indexOf(page.label)}
-              opacity={tabs.indexOf(page.label) === -1 ? 0.5 : 1}
+              value={tabs.indexOf(page.id)}
+              opacity={tabs.indexOf(page.id) === -1 ? 0.5 : 1}
               onChange={(e) =>
                 setTabs((curr) =>
                   curr.map((value, index) => {
-                    if (e.target.value === "-1" && page.label === value) {
+                    const currentValue = normalizePageId(value) || "";
+
+                    if (e.target.value === "-1" && page.id === currentValue) {
                       return "";
                     }
 
                     if (index.toString() === e.target.value) {
-                      return page.label;
+                      return page.id;
                     } else {
-                      return value;
+                      return currentValue;
                     }
                   })
                 )
               }
             >
-              <option value={0}>Position 1</option>
-              <option value={1}>Position 2</option>
+              <option value={0}>位置 1</option>
+              <option value={1}>位置 2</option>
             </Select>
           </Flex>
         );
@@ -79,11 +82,11 @@ const TabSelectorPage = () => {
       >
         <span />
         <Text bg={"blue.400"} p={1} rounded={"md"}>
-          Position 1
+          位置 1
         </Text>
         <span />
         <Text bg={"blue.400"} p={1} rounded={"md"}>
-          Position 2
+          位置 2
         </Text>
       </SimpleGrid>
     </Flex>

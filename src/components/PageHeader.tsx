@@ -5,12 +5,11 @@ import {
   Heading,
   LightMode,
   Text,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa";
 import { useIsLargeScreen } from "../utils/screenSize";
-import { IoChevronBack } from "react-icons/io5";
 import { GlassContainer } from "./GlassContainer";
+import { zhCN } from "../locales/zh-CN";
 
 export interface PageHeaderProps {
   title: string;
@@ -44,7 +43,7 @@ const PageHeader = (props: PageHeaderProps) => {
             h={12}
             p={1}
           >
-            <IoChevronBack size={25} />
+            {zhCN.common.back}
           </Button>
         )}
         <Heading size={"xl"} m={0}>

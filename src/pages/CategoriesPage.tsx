@@ -33,7 +33,7 @@ const CategoriesPage = () => {
   const location = useLocation();
   const isPage =
     location.pathname ===
-    Pages.find((page) => page.label === "Categories")?.url;
+    Pages.find((page) => page.id === "categories")?.url;
 
   const { data: settings } = useQuery("settings", TorrClient.getSettings);
 

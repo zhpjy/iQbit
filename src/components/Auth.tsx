@@ -14,6 +14,7 @@ import { TorrClient } from "../utils/TorrClient";
 import { LoggedInRoutes } from "../Routes";
 import { CredsLocalStorageKey, useLogin } from "../utils/useLogin";
 import { useQuery } from "react-query";
+import { zhCN } from "../locales/zh-CN";
 
 export const AuthChecker = () => {
   const { localCreds } = useLogin();
@@ -41,8 +42,8 @@ export const logout = async () => {
 };
 
 export const AuthView = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [accountName, setAccountName] = useState("");
+  const [secret, setSecret] = useState("");
 
   const { handleLogin, formError } = useLogin();
 
@@ -52,30 +53,30 @@ export const AuthView = () => {
       <LogoHeader />
       <VStack pt={5} px={10}>
         <VStack mb={8} justifyContent={"center"}>
-          <Heading size={"sm"}>Please Sign In</Heading>
+          <Heading size={"sm"}>{zhCN.auth.title}</Heading>
           <FormControl
             as={"form"}
             pt={3}
             isInvalid={!!formError}
             onSubmit={(e) => {
               e.preventDefault();
-              handleLogin({ username, password });
+              handleLogin({ username: accountName, password: secret });
             }}
           >
             <IosInput
-              label={"Username"}
+              label={zhCN.auth.username}
               labelWidth={105}
               first
-              value={username}
-              onChange={setUsername}
+              value={accountName}
+              onChange={setAccountName}
             />
             <IosInput
-              label={"Password"}
+              label={zhCN.auth.password}
               password
               labelWidth={105}
               last
-              value={password}
-              onChange={setPassword}
+              value={secret}
+              onChange={setSecret}
             />
             <FormErrorMessage>{formError}</FormErrorMessage>
             <Button
@@ -84,9 +85,11 @@ export const AuthView = () => {
               variant={"ghost"}
               mt={20}
               type={"submit"}
-              onClick={() => handleLogin({ username, password })}
+              onClick={() =>
+                handleLogin({ username: accountName, password: secret })
+              }
             >
-              Sign In
+              {zhCN.auth.signIn}
             </Button>
           </FormControl>
         </VStack>

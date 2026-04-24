@@ -24,8 +24,7 @@ const NavButton = (props: NavButtonProps) => {
   return (
     <NavLink to={props.path} style={{ flexGrow: 1 }}>
       {({ isActive: navActive }) => {
-        const isActive =
-          isSearch && props.label === "Search" ? true : navActive;
+        const isActive = isSearch && props.path === "/search" ? true : navActive;
 
         return (
           <Button

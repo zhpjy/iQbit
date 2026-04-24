@@ -21,7 +21,7 @@ export const LoggedInRoutes = () => {
               ) : (
                 <DefaultLayout>
                   {isLarge && page.url === "/"
-                    ? Pages.find((page) => page.label === "Search")?.component
+                    ? Pages.find((page) => page.id === "search")?.component
                     : page.component}
                 </DefaultLayout>
               )
