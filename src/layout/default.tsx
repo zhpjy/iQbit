@@ -57,8 +57,9 @@ const DefaultLayout = (props: PropsWithChildren<DefaultLayoutProps>) => {
   const largeWorkAreaBgColor = useColorModeValue("white", "gray.900");
 
   const storedTabs = useReadLocalStorage<(TabPageId | "")[]>("tabs-v2");
+  const storedTabValues = Array.isArray(storedTabs) ? storedTabs : undefined;
   const tabsSelected =
-    storedTabs?.map((tab) => normalizeTabPageId(tab) || "") ?? defaultTabs;
+    storedTabValues?.map((tab) => normalizeTabPageId(tab) || "") ?? defaultTabs;
 
   const middleTab = tabsSelected[0] || "trending";
   const rightTab = tabsSelected[1] || "search";

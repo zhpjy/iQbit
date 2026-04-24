@@ -18,7 +18,8 @@ const TabSelectorPage = () => {
     "tabs-v2",
     defaultTabs
   );
-  const tabs = storedTabs.map((tab) => normalizeTabPageId(tab) || "");
+  const tabValues = Array.isArray(storedTabs) ? storedTabs : defaultTabs;
+  const tabs = tabValues.map((tab) => normalizeTabPageId(tab) || "");
 
   return (
     <Flex flexDirection={"column"} gap={4}>
