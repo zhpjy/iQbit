@@ -37,10 +37,45 @@ import { zhCN } from "../locales/zh-CN";
 import { List, WindowScroller } from "react-virtualized";
 
 const SHOW_ALL_FILTER = "__all__";
+const CATEGORY_FILTER_ALL = "all";
+const CATEGORY_FILTER_PREFIX = "category:";
 const LEGACY_SHOW_ALL_FILTER = ["Show", "All"].join(" ");
+const LEGACY_CATEGORY_ALL_FILTER = "__all__";
 
 const normalizeFilterValue = (value: string) =>
   value === LEGACY_SHOW_ALL_FILTER ? SHOW_ALL_FILTER : value;
+
+const encodeCategoryFilterValue = (category: string) =>
+  `${CATEGORY_FILTER_PREFIX}${category}`;
+
+const normalizeCategoryFilterValue = (value: string) => {
+  if (
+    value === CATEGORY_FILTER_ALL ||
+    value === LEGACY_SHOW_ALL_FILTER ||
+    value === LEGACY_CATEGORY_ALL_FILTER
+  ) {
+    return CATEGORY_FILTER_ALL;
+  }
+
+  if (value.startsWith(CATEGORY_FILTER_PREFIX)) {
+    return value;
+  }
+
+  return encodeCategoryFilterValue(value);
+};
+
+const decodeCategoryFilterValue = (value: string) => {
+  const normalizedValue = normalizeCategoryFilterValue(value);
+
+  if (normalizedValue === CATEGORY_FILTER_ALL) {
+    return { showAll: true as const, category: "" };
+  }
+
+  return {
+    showAll: false as const,
+    category: normalizedValue.slice(CATEGORY_FILTER_PREFIX.length),
+  };
+};
 
 const Home = () => {
   const { mutate: resumeAll } = useMutation("resumeAll", TorrClient.resumeAll);
@@ -160,7 +195,7 @@ const Home = () => {
   );
   const [filterCategory, setFilterCategory] = useLocalStorage(
     "home-filter-category",
-    SHOW_ALL_FILTER
+    CATEGORY_FILTER_ALL
   );
   const [filterStatus, setFilterStatus] = useLocalStorage(
     "home-filter-status",
@@ -169,23 +204,24 @@ const Home = () => {
 
   const resetFilters = () => {
     setFilterStatus(SHOW_ALL_FILTER);
-    setFilterCategory(SHOW_ALL_FILTER);
+    setFilterCategory(CATEGORY_FILTER_ALL);
     setFilterSearch("");
   };
 
   const bgColor = useColorModeValue("white", "gray.900");
   const { isDarkMode } = useTernaryDarkMode();
-  const normalizedFilterCategory = normalizeFilterValue(filterCategory);
+  const normalizedFilterCategory = normalizeCategoryFilterValue(filterCategory);
+  const decodedFilterCategory = decodeCategoryFilterValue(filterCategory);
   const normalizedFilterStatus = normalizeFilterValue(filterStatus);
 
   const filterIndicator = useMemo(() => {
     let indicator = 0;
     if (filterSearch !== "") indicator++;
     if (normalizedFilterStatus !== SHOW_ALL_FILTER) indicator++;
-    if (normalizedFilterCategory !== SHOW_ALL_FILTER) indicator++;
+    if (!decodedFilterCategory.showAll) indicator++;
 
     return indicator;
-  }, [filterSearch, normalizedFilterCategory, normalizedFilterStatus]);
+  }, [filterSearch, decodedFilterCategory.showAll, normalizedFilterStatus]);
 
   const Torrents = useMemo(() => {
     if (torrentsTx === undefined) {
@@ -196,8 +232,8 @@ const Home = () => {
       ?.sort((a, b) => b[1]?.added_on - a[1]?.added_on)
       ?.filter(([hash]) => !removedTorrs.includes(hash))
       ?.filter(([hash, torr]) =>
-        normalizedFilterCategory !== SHOW_ALL_FILTER
-          ? torr.category === normalizedFilterCategory
+        !decodedFilterCategory.showAll
+          ? torr.category === decodedFilterCategory.category
           : true
       )
       ?.filter(([hash, torr]) =>
@@ -209,7 +245,8 @@ const Home = () => {
   }, [
     torrentsTx,
     removedTorrs,
-    normalizedFilterCategory,
+    decodedFilterCategory.showAll,
+    decodedFilterCategory.category,
     normalizedFilterStatus,
     filterSearch,
   ]);
@@ -217,7 +254,7 @@ const Home = () => {
   const Categories = useMemo(() => {
     return Object.values(categories || {}).map((c) => ({
       label: c.name,
-      value: c.name,
+      value: encodeCategoryFilterValue(c.name),
     }));
   }, [categories]);
 
@@ -445,13 +482,15 @@ const Home = () => {
                   <FormLabel>{zhCN.home.category}</FormLabel>
                   <Select
                     value={normalizedFilterCategory}
-                    onChange={(e) =>
-                      setFilterCategory(normalizeFilterValue(e.target.value))
-                    }
+                    onChange={(e) => setFilterCategory(e.target.value)}
                   >
-                    <option value={SHOW_ALL_FILTER}>{zhCN.home.showAll}</option>
+                    <option value={CATEGORY_FILTER_ALL}>
+                      {zhCN.home.showAll}
+                    </option>
                     {Categories.map((cat) => (
-                      <option key={cat.label}>{cat.label}</option>
+                      <option key={cat.value} value={cat.value}>
+                        {cat.label}
+                      </option>
                     ))}
                   </Select>
                 </FormControl>
