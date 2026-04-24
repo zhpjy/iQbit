@@ -82,7 +82,9 @@ const SearchPlugin = ({ plugin }: { plugin: TorrPlugin }) => {
             />
             <Heading>{plugin.fullName}</Heading>
           </Flex>
-          <Text opacity={0.5}>Version {plugin.version}</Text>
+          <Text opacity={0.5}>
+            {zhCN.plugins.version} {plugin.version}
+          </Text>
           <Text opacity={0.5}>{plugin.url}</Text>
         </span>
         <Flex>

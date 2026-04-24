@@ -36,7 +36,7 @@ const IntegrationsPage = () => {
                         />
                     </FormControl>
                     <FormControl>
-                        <FormLabel>{zhCN.integrations.apiKey}</FormLabel>
+                        <FormLabel>{zhCN.integrations.sonarrApiKey}</FormLabel>
                         <Input
                             type="password"
                             placeholder={zhCN.integrations.yourSonarrApiKey}
@@ -61,7 +61,7 @@ const IntegrationsPage = () => {
                         />
                     </FormControl>
                     <FormControl>
-                        <FormLabel>{zhCN.integrations.apiKey}</FormLabel>
+                        <FormLabel>{zhCN.integrations.radarrApiKey}</FormLabel>
                         <Input
                             type="password"
                             placeholder={zhCN.integrations.yourRadarrApiKey}
