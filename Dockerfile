@@ -1,9 +1,9 @@
-FROM node:14
+FROM node:20
 ENV QBIT_HOST=http://localhost:8080
 WORKDIR /usr/src/node-app
 COPY . ./
-RUN npm install
-RUN npm run build
+RUN yarn install --frozen-lockfile
+RUN yarn build
 RUN npm run server-setup
 
 EXPOSE 8081
