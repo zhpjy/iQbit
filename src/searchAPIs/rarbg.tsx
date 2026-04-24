@@ -12,6 +12,7 @@ import { rarbgAPI, RarbgCategoryDictionary } from "../utils/RarBGClient";
 import ReactGA from "react-ga";
 import CategorySelect from "../components/CategorySelect";
 import {SectionSM} from "./yts";
+import { zhCN } from "../locales/zh-CN";
 
 const RarbgSearch = (props: SearchProviderComponentProps) => {
   const {
@@ -102,7 +103,7 @@ const RarbgSearch = (props: SearchProviderComponentProps) => {
         onChange={(e) => props.searchState[1](e.target.value)}
         isLoading={isLoading}
         onSearch={search}
-        placeholder={`Search ${props.category}...`}
+        placeholder={`${zhCN.search.title} ${props.category}...`}
       />
       <Flex flexDirection={"column"} gap={2} width={"100%"}>
         {(!data?.torrent_results?.length || true) && (
@@ -110,7 +111,7 @@ const RarbgSearch = (props: SearchProviderComponentProps) => {
         )}
         {data && (
           <SectionSM
-            title={"Results"}
+            title={zhCN.search.results}
             titleRight={
               <CategorySelect category={addToCategory} onSelected={setAddToCategory}/>
             }

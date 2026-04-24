@@ -29,6 +29,7 @@ import PosterGrid from "../components/PosterGrid";
 import IosActionSheet from "../components/ios/IosActionSheet";
 import {TorrClient} from "../utils/TorrClient";
 import CategorySelect from "../components/CategorySelect";
+import { zhCN } from "../locales/zh-CN";
 
 export const useSearchFromParams = (callback: () => void) => {
   const { query } = useParams();
@@ -153,7 +154,7 @@ const YTSSearch = (props: SearchProviderComponentProps) => {
         onChange={(e) => props.searchState[1](e.target.value)}
         isLoading={isLoading}
         onSearch={() => mutate()}
-        placeholder={`Search ${props.category}...`}
+        placeholder={`${zhCN.search.title} ${props.category}...`}
       />
       {(!data?.movies?.length || true) && <Filters {...props.filterState} />}
 
@@ -176,7 +177,7 @@ const YTSSearch = (props: SearchProviderComponentProps) => {
         modalProps={{ size: "xl", scrollBehavior: "inside" }}
       >
         <Flex flexDirection={"column"} gap={4}>
-          <SectionSM title={"Torrents"}
+          <SectionSM title={zhCN.search.results}
             titleRight={
 
               <CategorySelect category={addToCategory} onSelected={setAddToCategory} />
@@ -209,7 +210,7 @@ const YTSSearch = (props: SearchProviderComponentProps) => {
               );
             })}
           </SectionSM>
-          <SectionSM title={"Description"}>
+          <SectionSM title={zhCN.search.description}>
             <Text noOfLines={expandedDescription ? undefined : 2}>
               {selectedMovie?.description_full}
             </Text>
@@ -219,46 +220,48 @@ const YTSSearch = (props: SearchProviderComponentProps) => {
               alignSelf={"end"}
               onClick={toggleExpandedDescription}
             >
-              {expandedDescription ? "Read Less" : "Read More"}
+              {expandedDescription
+                ? zhCN.search.readLess
+                : zhCN.search.readMore}
             </Button>
           </SectionSM>
-          <SectionSM title={"Info"}>
+          <SectionSM title={zhCN.search.info}>
             <Flex width={"100%"} gap={3} fontSize={"xl"} wrap={"wrap"}>
               <InfoDataBox
-                title={"Ratings"}
+                title={zhCN.search.ratings}
                 icon={<SiRottentomatoes />}
                 label={(selectedMovie?.rating || "--") + " / 10"}
               />
               <InfoDataBox
-                title={"Runtime"}
+                title={zhCN.search.runtime}
                 icon={<IoTime />}
                 label={(selectedMovie?.runtime || "--") + " min"}
               />
               <InfoDataBox
-                title={"Language"}
+                title={zhCN.search.language}
                 icon={<IoEarth />}
                 label={selectedMovie?.language || ""}
               />
               <InfoDataBox
-                title={"MPA Rating"}
+                title={zhCN.search.mpaRating}
                 icon={<IoWarning />}
                 label={selectedMovie?.mpa_rating || ""}
               />
               <InfoDataBox
-                title={"Genres"}
+                title={zhCN.search.genres}
                 icon={<IoPricetags />}
                 label={(selectedMovie?.genres || []).join(", ")}
               />
             </Flex>
           </SectionSM>
           {selectedMovie?.yt_trailer_code && (
-            <SectionSM title={"Trailer"}>
+            <SectionSM title={zhCN.search.trailer}>
               <AspectRatio ratio={16 / 9} width={"100%"}>
                 <iframe
                   width={"100%"}
                   height={"100%"}
                   className={"movieTrailer"}
-                  title={"Movie Trailer"}
+                  title={zhCN.search.trailer}
                   src={
                     "https://www.youtube.com/embed/" +
                     selectedMovie.yt_trailer_code

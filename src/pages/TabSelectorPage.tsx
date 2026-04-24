@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { Pages, TabPageId, normalizeTabPageId } from "../Pages";
 import { useLocalStorage } from "usehooks-ts";
+import { zhCN } from "../locales/zh-CN";
 
 export const defaultTabs: TabPageId[] = ["trending", "search"];
 
@@ -70,8 +71,8 @@ const TabSelectorPage = () => {
                 )
               }
             >
-              <option value={0}>位置 1</option>
-              <option value={1}>位置 2</option>
+              <option value={0}>{zhCN.tabSelector.position1}</option>
+              <option value={1}>{zhCN.tabSelector.position2}</option>
             </Select>
           </Flex>
         );
@@ -87,11 +88,11 @@ const TabSelectorPage = () => {
       >
         <span />
         <Text bg={"blue.400"} p={1} rounded={"md"}>
-          位置 1
+          {zhCN.tabSelector.position1}
         </Text>
         <span />
         <Text bg={"blue.400"} p={1} rounded={"md"}>
-          位置 2
+          {zhCN.tabSelector.position2}
         </Text>
       </SimpleGrid>
     </Flex>

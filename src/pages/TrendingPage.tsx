@@ -25,6 +25,7 @@ import { providers } from "./SearchPage";
 import { useNavigate } from "react-router-dom";
 import { SearchPluginsPageQuery } from "./SearchPluginsPage";
 import { TorrClient } from "../utils/TorrClient";
+import { zhCN } from "../locales/zh-CN";
 
 const smallImage = "http://image.tmdb.org/t/p/w200";
 const originalImage = "http://image.tmdb.org/t/p/original";
@@ -39,7 +40,7 @@ const getBrowserLanguage = () => {
 };
 
 const TrendingPage = () => {
-  const tabs = ["Movies", "TV", "TOP 100"];
+  const tabs = [zhCN.trending.movies, zhCN.trending.tv, zhCN.trending.top100];
   const [tab, setTab] = useState(0);
 
   const [selectedMovie, setSelectedMovie] = useState<MovieResult>();
@@ -112,8 +113,8 @@ const TrendingPage = () => {
 
   return (
     <>
-      <PageHeader title={"Trending"} />
-      <Text color={"gray.500"}>Trending Movies and Shows from TMDB</Text>
+      <PageHeader title={zhCN.trending.title} />
+      <Text color={"gray.500"}>{zhCN.trending.subtitle}</Text>
       
       {/* FIX 1: Added Box wrapper for scrollable tabs on small screens */}
       <Box overflowX="auto" pb={2} mb={2} className="no-scrollbar">
@@ -128,7 +129,7 @@ const TrendingPage = () => {
           keyExtractor={(item) =>
             item?.id?.toString() || Math.random().toString()
           }
-          titleExtractor={(movie) => movie?.title || "Unknown Title"}
+          titleExtractor={(movie) => movie?.title || zhCN.trending.unknownTitle}
           images={(movie) => ({
             large: originalImage + movie.poster_path || "",
             small: smallImage + movie.poster_path || "",
@@ -149,7 +150,7 @@ const TrendingPage = () => {
           keyExtractor={(show) =>
             show?.id?.toString() || Math.random().toString()
           }
-          titleExtractor={(show) => show?.name || "Unknown Show"}
+          titleExtractor={(show) => show?.name || zhCN.trending.unknownShow}
           images={(show) => ({
             large: originalImage + show.poster_path || "",
             small: smallImage + show.poster_path || "",
@@ -166,7 +167,9 @@ const TrendingPage = () => {
             keyExtractor={(item) =>
               item?.id?.toString() || Math.random().toString()
             }
-            titleExtractor={(movie) => movie?.title || "Unknown Title"}
+            titleExtractor={(movie) =>
+              movie?.title || zhCN.trending.unknownTitle
+            }
             images={(movie) => ({
               large: originalImage + movie.poster_path || "",
               small: smallImage + movie.poster_path || "",
@@ -188,7 +191,7 @@ const TrendingPage = () => {
             colorScheme={"blue"}
             onClick={handleLoadMore}
           >
-            Load More
+            {zhCN.trending.loadMore}
           </Button>
         </Flex>
       ) : null}
@@ -199,7 +202,7 @@ const TrendingPage = () => {
         disclosure={movieBottomSheet}
       >
         <Flex flexDirection={"column"} gap={4}>
-          <SectionSM title={"Download from YTS"}>
+          <SectionSM title={zhCN.trending.downloadFromYts}>
             {torrsLoading ? (
               <Flex justifyContent={"center"} w={"full"}>
                 <Spinner color={"blue"} mt={3} />
@@ -207,7 +210,7 @@ const TrendingPage = () => {
             ) : (TorrData?.movies?.[0]?.torrents?.length || 0) === 0 ? (
               <Flex flexDirection={"column"} gap={4} w={"100%"}>
                 <Text opacity={0.5}>
-                  YTS might have it but I did not find it automagically.
+                  {zhCN.trending.ytsNotFound}
                 </Text>
                 {providerMapper.map(([key, data]) => (
                   <Flex
@@ -240,7 +243,7 @@ const TrendingPage = () => {
                           })
                         }
                       >
-                        Search with {key}
+                        {zhCN.search.searchWith.replace("{provider}", key)}
                       </Button>
                     </LightMode>
                   </Flex>
@@ -249,8 +252,12 @@ const TrendingPage = () => {
             ) : (
               <Box p={3} rounded={"md"} bgColor={bgColor} w={"full"}>
                 <Text>
-                  Showing torrents for <b>{TorrData?.movies?.[0].title}</b>{" "}
-                  released in <b>{TorrData?.movies?.[0].year}</b>
+                  {zhCN.trending.showingTorrentsFor
+                    .replace("{title}", TorrData?.movies?.[0].title || "")
+                    .replace(
+                      "{year}",
+                      String(TorrData?.movies?.[0].year || "--")
+                    )}
                 </Text>
               </Box>
             )}
@@ -281,7 +288,7 @@ const TrendingPage = () => {
               );
             })}
           </SectionSM>
-          <SectionSM title={"Description"}>
+          <SectionSM title={zhCN.search.description}>
             <Text>{selectedMovie?.overview}</Text>
           </SectionSM>
         </Flex>
@@ -293,7 +300,7 @@ const TrendingPage = () => {
         modalProps={{ size: "xl" }}
       >
         <Flex flexDirection={"column"} gap={4}>
-          <SectionSM title={"Search Torrent"}>
+          <SectionSM title={zhCN.trending.searchTorrent}>
             <Flex
               flexWrap={"wrap"}
               gap={3}
@@ -326,14 +333,14 @@ const TrendingPage = () => {
                         })
                       }
                     >
-                      Search with {key}
+                      {zhCN.search.searchWith.replace("{provider}", key)}
                     </Button>
                   </LightMode>
                 </Flex>
               ))}
             </Flex>
           </SectionSM>
-          <SectionSM title={"Description"}>
+          <SectionSM title={zhCN.search.description}>
             <Text>{selectedTv?.overview}</Text>
           </SectionSM>
         </Flex>

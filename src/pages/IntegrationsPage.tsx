@@ -9,6 +9,7 @@ import {
     useColorModeValue,
 } from "@chakra-ui/react";
 import { useLocalStorage } from "usehooks-ts";
+import { zhCN } from "../locales/zh-CN";
 
 const IntegrationsPage = () => {
     const [sonarrUrl, setSonarrUrl] = useLocalStorage("iqbit-sonarr-url", "");
@@ -23,11 +24,11 @@ const IntegrationsPage = () => {
         <VStack spacing={6} align="stretch" p={4} maxW="container.md" mx="auto">
             <Box p={6} bg={bgColor} borderRadius="md" shadow="sm">
                 <Heading size="md" mb={4} color="teal.500">
-                    Sonarr Integration
+                    {zhCN.integrations.sonarrTitle}
                 </Heading>
                 <VStack spacing={4}>
                     <FormControl>
-                        <FormLabel>Sonarr URL</FormLabel>
+                        <FormLabel>{zhCN.integrations.sonarrUrl}</FormLabel>
                         <Input
                             placeholder="http://192.168.1.100:8989"
                             value={sonarrUrl}
@@ -35,10 +36,10 @@ const IntegrationsPage = () => {
                         />
                     </FormControl>
                     <FormControl>
-                        <FormLabel>API Key</FormLabel>
+                        <FormLabel>{zhCN.integrations.apiKey}</FormLabel>
                         <Input
                             type="password"
-                            placeholder="Your Sonarr API Key"
+                            placeholder={zhCN.integrations.yourSonarrApiKey}
                             value={sonarrApiKey}
                             onChange={(e) => setSonarrApiKey(e.target.value)}
                         />
@@ -48,11 +49,11 @@ const IntegrationsPage = () => {
 
             <Box p={6} bg={bgColor} borderRadius="md" shadow="sm">
                 <Heading size="md" mb={4} color="yellow.500">
-                    Radarr Integration
+                    {zhCN.integrations.radarrTitle}
                 </Heading>
                 <VStack spacing={4}>
                     <FormControl>
-                        <FormLabel>Radarr URL</FormLabel>
+                        <FormLabel>{zhCN.integrations.radarrUrl}</FormLabel>
                         <Input
                             placeholder="http://192.168.1.100:7878"
                             value={radarrUrl}
@@ -60,10 +61,10 @@ const IntegrationsPage = () => {
                         />
                     </FormControl>
                     <FormControl>
-                        <FormLabel>API Key</FormLabel>
+                        <FormLabel>{zhCN.integrations.apiKey}</FormLabel>
                         <Input
                             type="password"
-                            placeholder="Your Radarr API Key"
+                            placeholder={zhCN.integrations.yourRadarrApiKey}
                             value={radarrApiKey}
                             onChange={(e) => setRadarrApiKey(e.target.value)}
                         />

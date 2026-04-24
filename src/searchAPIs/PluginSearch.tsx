@@ -19,6 +19,7 @@ import { useIsLargeScreen } from "../utils/screenSize";
 import { StatWithIcon } from "../components/StatWithIcon";
 import { parseFromString, qualityAliases, typeAliases } from "./tpb";
 import Filters from "../components/Filters";
+import { zhCN } from "../locales/zh-CN";
 
 const PluginSearch = (props: SearchProviderComponentProps) => {
   const [searchId, setSearchId] = useState<number>();
@@ -109,7 +110,7 @@ const PluginSearch = (props: SearchProviderComponentProps) => {
         onChange={(e) => props.searchState[1](e.target.value)}
         isLoading={createLoading}
         onSearch={() => createSearch(props.searchState[0])}
-        placeholder={`Search ${props.category}...`}
+        placeholder={`${zhCN.search.title} ${props.category}...`}
       />
 
       {searchId && (
@@ -128,10 +129,10 @@ const PluginSearch = (props: SearchProviderComponentProps) => {
           <Flex alignItems={"center"} gap={4}>
             <Spinner color={"blue.500"} />
             <Flex flexDirection={"column"} alignItems={"start"}>
-              <Heading size={"md"}>Search in progress...</Heading>
+              <Heading size={"md"}>{zhCN.search.searchInProgress}</Heading>
               <StatWithIcon
                 icon={<IoList />}
-                label={(data?.total || 0) + " Results"}
+                label={`${data?.total || 0} ${zhCN.search.results}`}
               />
             </Flex>
           </Flex>
@@ -141,7 +142,7 @@ const PluginSearch = (props: SearchProviderComponentProps) => {
               colorScheme={"blue"}
               onClick={() => stopSearch()}
             >
-              Stop
+              {zhCN.search.stopButton}
             </Button>
           </LightMode>
         </Flex>
@@ -155,7 +156,7 @@ const PluginSearch = (props: SearchProviderComponentProps) => {
           size="sm"
           variant="ghost"
         >
-          Update Search Plugins
+          {zhCN.search.updatePlugins}
         </Button>
       </Flex>
       {filteredResults.map((result) => (

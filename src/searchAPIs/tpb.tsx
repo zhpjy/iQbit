@@ -11,6 +11,7 @@ import TorrentMovieData from "../components/TorrentMovieData";
 import Filters from "../components/Filters";
 import ReactGA from "react-ga";
 import CategorySelect from "../components/CategorySelect";
+import { zhCN } from "../locales/zh-CN";
 
 export type AliasList = { name: string; aliases?: string[] }[];
 
@@ -165,13 +166,13 @@ const TPBSearch = (props: SearchProviderComponentProps) => {
         onChange={(e) => props.searchState[1](e.target.value)}
         isLoading={isLoading}
         onSearch={search}
-        placeholder={`Search ${props.category}...`}
+        placeholder={`${zhCN.search.title} ${props.category}...`}
       />
       <Flex flexDirection={"column"} gap={2} width={"100%"}>
         {(!data?.length || true) && <Filters {...props.filterState} />}
         {data && (
           <SectionSM
-            title={"Results"}
+            title={zhCN.search.results}
             titleRight={
               <CategorySelect
                 category={addToCategory}

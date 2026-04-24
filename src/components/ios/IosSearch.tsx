@@ -11,6 +11,7 @@ import { IoSearch } from "react-icons/io5";
 import { useIsLargeScreen } from "../../utils/screenSize";
 import { useIsPWA } from "../../hooks/useIsPWA";
 import { GlassContainer } from "../GlassContainer";
+import { zhCN } from "../../locales/zh-CN";
 
 export interface IosSearchProps extends InputProps {
   onSearch: () => void;
@@ -59,7 +60,9 @@ const IosSearch = ({ onSearch, isLoading, ...props }: IosSearchProps) => {
           colorScheme={"blue"}
           px={8}
         >
-          {props.startStop && isLoading ? "Stop" : "Search"}
+          {props.startStop && isLoading
+            ? zhCN.search.stopButton
+            : zhCN.search.searchButton}
         </Button>
       </LightMode>
     </Flex>

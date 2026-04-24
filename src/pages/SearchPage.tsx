@@ -21,6 +21,7 @@ import { TorrClient } from "../utils/TorrClient";
 import QbitLogo from "../images/qbitLogo";
 import { SearchPluginsPageQuery } from "./SearchPluginsPage";
 import PluginSearch from "../searchAPIs/PluginSearch";
+import { zhCN } from "../locales/zh-CN";
 
 export type ProviderKeys = "YTS" | "TPB" | "plugin";
 
@@ -90,7 +91,7 @@ const ProviderButton = (
             bottom={0}
             bgColor={"blue.500"}
           >
-            EXPERIMENTAL
+            {zhCN.search.experimental}
           </Text>
         </LightMode>
       )}
@@ -125,13 +126,12 @@ const SearchPage = () => {
 
   return (
     <>
-      <PageHeader title={"Search"} />
+      <PageHeader title={zhCN.search.title} />
       <Text color={"gray.500"} mb={5}>
-        Warning: Be sure to comply with your country's copyright laws when
-        downloading torrents from any of these search engines.
+        {zhCN.search.warning}
       </Text>
       <Heading size={"md"} mb={3}>
-        Select Search Provider
+        {zhCN.search.selectProvider}
       </Heading>
       <Flex
         mb={3}
