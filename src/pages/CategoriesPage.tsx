@@ -23,6 +23,7 @@ import { useIsLargeScreen } from "../utils/screenSize";
 import { MobileSettingsAddButton } from "./SearchPluginsPage";
 import { useLocation } from "react-router-dom";
 import { Pages } from "../Pages";
+import { zhCN } from "../locales/zh-CN";
 
 const CategoriesPage = () => {
   const { data, refetch } = useQuery(
@@ -102,12 +103,12 @@ const CategoriesPage = () => {
     <>
       {isLarge || isPage ? (
         <PageHeader
-          title={"Categories"}
+          title={zhCN.nav.categories}
           onAddButtonClick={() => {
             setSelectedCategory({ mode: "Add", cat: addCategoryObject });
             editDisclosure.onOpen();
           }}
-          buttonLabel={"Add Category"}
+          buttonLabel={zhCN.categories.addCategory}
         />
       ) : (
         <MobileSettingsAddButton
@@ -145,18 +146,22 @@ const CategoriesPage = () => {
               editDisclosure.onOpen();
             }}
           >
-            Edit
+            {zhCN.common.edit}
           </Button>
         </Flex>
       ))}
 
       <IosBottomSheet
-        title={`${selectedCategory.mode} Category`}
+        title={
+          selectedCategory.mode === "Add"
+            ? zhCN.categories.addCategory
+            : zhCN.categories.editCategory
+        }
         disclosure={editDisclosure}
       >
         <Flex flexDirection={"column"} gap={5}>
           <FormControl>
-            <FormLabel>Category Name</FormLabel>
+            <FormLabel>{zhCN.categories.categoryName}</FormLabel>
             {selectedCategory.mode === "Edit" ? (
               <Heading size={"lg"}>{selectedCategory.cat.name}</Heading>
             ) : (
@@ -169,7 +174,7 @@ const CategoriesPage = () => {
             )}
           </FormControl>
           <FormControl>
-            <FormLabel>Category Save Path</FormLabel>
+            <FormLabel>{zhCN.categories.categorySavePath}</FormLabel>
             <Input
               value={selectedCategory.cat.savePath}
               onChange={(event) =>
@@ -177,7 +182,7 @@ const CategoriesPage = () => {
               }
             />
             <FormHelperText display={"flex"} alignItems={"center"} gap={2}>
-              <Text>Default:</Text>
+              <Text>{zhCN.common.default}:</Text>
               <Tag>{settings?.save_path}</Tag>
             </FormHelperText>
           </FormControl>
@@ -205,7 +210,9 @@ const CategoriesPage = () => {
                 size={"lg"}
                 onClick={() => saveCategory()}
               >
-                {selectedCategory.mode === "Add" ? "Add" : "Save"} Category
+                {selectedCategory.mode === "Add"
+                  ? zhCN.categories.addCategory
+                  : `${zhCN.common.save}${zhCN.nav.categories}`}
               </Button>
             </LightMode>
           </Flex>

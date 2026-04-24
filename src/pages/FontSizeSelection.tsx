@@ -13,25 +13,28 @@ import {
 } from "@chakra-ui/react";
 import { useFontSizeContext } from "../components/FontSizeProvider";
 import { Input } from "@chakra-ui/input";
+import { zhCN } from "../locales/zh-CN";
 
 export interface FontSizeSelectionProps {}
 
 const amounts = {
-  "Extra Tiny": 15,
-  Tiny: 25,
-  Smaller: 60,
-  Small: 70,
-  Smallish: 80,
-  "Medium Small": 90,
-  "Medium (Default)": 100,
-  "Medium Large": 110,
-  "Large-ish": 120,
-  Large: 130,
-  Larger: 140,
-  "Pretty Big": 150,
-  Big: 175,
-  Huge: 200,
+  "超小": 15,
+  "极小": 25,
+  "较小": 60,
+  "小": 70,
+  "偏小": 80,
+  "中偏小": 90,
+  "中等（默认）": 100,
+  "中偏大": 110,
+  "偏大": 120,
+  "大": 130,
+  "更大": 140,
+  "很大": 150,
+  "超大": 175,
+  "巨大": 200,
 };
+
+const CUSTOM_OPTION = "custom";
 
 const FontSizeSelection = (props: FontSizeSelectionProps) => {
   const isLarge = useIsLargeScreen();
@@ -46,7 +49,7 @@ const FontSizeSelection = (props: FontSizeSelectionProps) => {
     if (isPreset) {
       return scale;
     } else {
-      return "Custom";
+      return CUSTOM_OPTION;
     }
   }, [scale]);
 
@@ -64,7 +67,7 @@ const FontSizeSelection = (props: FontSizeSelectionProps) => {
       wantsCustom.onClose();
       setScale(value);
     } else {
-      if (value === "Custom") {
+      if (value === CUSTOM_OPTION) {
         wantsCustom.onOpen();
       } else {
         setScale(parseInt(value));
@@ -74,11 +77,11 @@ const FontSizeSelection = (props: FontSizeSelectionProps) => {
 
   return (
     <>
-      {isLarge && <PageHeader title={"Font Size"} />}
+      {isLarge && <PageHeader title={zhCN.fontSize.title} />}
       <Flex flexDirection={"column"} gap={5}>
         <FormControl>
           <Flex justifyContent={"space-between"}>
-            <FormLabel>Select Font Size</FormLabel>
+            <FormLabel>{zhCN.fontSize.selectFontSize}</FormLabel>
             {value !== 100 && (
               <Button
                 variant={"ghost"}
@@ -86,27 +89,27 @@ const FontSizeSelection = (props: FontSizeSelectionProps) => {
                 colorScheme={"blue"}
                 onClick={() => onChange(100)}
               >
-                Reset Default
+                {zhCN.fontSize.resetDefault}
               </Button>
             )}
           </Flex>
           <Select value={value} onChange={(e) => onChange(e.target.value)}>
-            <optgroup label={"Select Size"}>
+            <optgroup label={zhCN.fontSize.selectSize}>
               {Object.entries(amounts).map(([key, val]) => (
                 <option key={key} value={val}>
                   {key}
                 </option>
               ))}
             </optgroup>
-            <optgroup label={"Enter your own size"}>
-              <option value={"Custom"}>Custom</option>
+            <optgroup label={zhCN.fontSize.enterYourOwnSize}>
+              <option value={CUSTOM_OPTION}>{zhCN.fontSize.custom}</option>
             </optgroup>
           </Select>
-          <FormHelperText>Preset sizes are applied immediately.</FormHelperText>
+          <FormHelperText>{zhCN.fontSize.presetApplied}</FormHelperText>
         </FormControl>
         {wantsCustom.isOpen && (
           <FormControl>
-            <FormLabel>Enter Custom Scale</FormLabel>
+            <FormLabel>{zhCN.fontSize.enterCustomScale}</FormLabel>
             <Flex gap={3}>
               <Input
                 type={"number"}
@@ -119,7 +122,7 @@ const FontSizeSelection = (props: FontSizeSelectionProps) => {
                   px={8}
                   onClick={() => onChange(customValue)}
                 >
-                  Apply
+                  {zhCN.common.apply}
                 </Button>
               </LightMode>
             </Flex>

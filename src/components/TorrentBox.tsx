@@ -48,6 +48,7 @@ import { CreateETAString } from "../utils/createETAString";
 import { useIsLargeScreen } from "../utils/screenSize";
 import { GlassContainer } from "./GlassContainer";
 import { colors } from "../App";
+import { zhCN } from "../locales/zh-CN";
 
 export interface TorrentBoxProps {
   torrentData: Omit<TorrTorrentInfo, "hash">;
@@ -321,35 +322,35 @@ const TorrentBox = ({
               disclosure={actionSheetDisclosure}
               options={[
                 {
-                  label: "Remove Torrent",
+                  label: zhCN.torrentActions.removeTorrent,
                   onClick: () => deleteConfirmationDisclosure.onOpen(),
                   danger: true,
                 },
                 {
-                  label: "Change Category",
+                  label: zhCN.torrentActions.changeCategory,
                   onClick: () => categoryChangeDisclosure.onOpen(),
                 },
                 {
-                  label: `Sequential Download`,
+                  label: zhCN.torrentActions.sequentialDownload,
                   onClick: toggleSequentialDownload,
                   checked: torrentData.seq_dl,
                 },
                 {
-                  label: "First and Last piece first",
+                  label: zhCN.torrentActions.firstAndLastPiece,
                   onClick: toggleFirstLastPiecePrio,
                   checked: torrentData.f_l_piece_prio,
                 },
                 {
-                  label: "Automatic management",
+                  label: zhCN.torrentActions.autoManagement,
                   onClick: toggleAutoManagement,
                   checked: torrentData.auto_tmm,
                 },
                 {
-                  label: "Rename Torrent",
+                  label: zhCN.torrentActions.renameTorrent,
                   onClick: () => renameTorrentDisclosure.onOpen(),
                 },
                 {
-                  label: "Torrent Information",
+                  label: zhCN.torrentActions.torrentInfo,
                   onClick: () => TorrentInformationDisclosure.onOpen(),
                 },
               ]}
@@ -358,12 +359,12 @@ const TorrentBox = ({
               disclosure={deleteConfirmationDisclosure}
               options={[
                 {
-                  label: "Delete Files",
+                  label: zhCN.torrentActions.deleteFiles,
                   onClick: () => remove(true),
                   danger: true,
                 },
                 {
-                  label: "Remove Torrent Only",
+                  label: zhCN.torrentActions.removeTorrentOnly,
                   onClick: () => remove(false),
                 },
               ]}
@@ -403,12 +404,12 @@ const TorrentBox = ({
         </Flex>
       </Box>
       <IosBottomSheet
-        title={"Rename Torrent"}
+        title={zhCN.torrentActions.renameTorrent}
         disclosure={renameTorrentDisclosure}
       >
         <VStack gap={10}>
           <FormControl>
-            <FormLabel>Rename Torrent</FormLabel>
+            <FormLabel>{zhCN.torrentActions.renameTorrent}</FormLabel>
             <Input
               disabled={renameLoading}
               value={newName}
@@ -431,13 +432,13 @@ const TorrentBox = ({
               onClick={() => renameTorrent()}
               isLoading={renameLoading}
             >
-              Save New Name
+              {zhCN.torrentActions.saveNewName}
             </Button>
           </LightMode>
         </VStack>
       </IosBottomSheet>
       <IosBottomSheet
-        title={"Torrent Information"}
+        title={zhCN.torrentActions.torrentInfo}
         disclosure={TorrentInformationDisclosure}
         modalProps={{ size: "3xl" }}
       >

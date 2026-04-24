@@ -15,6 +15,7 @@ import {
 import { IoClose, IoFilter } from "react-icons/io5";
 import { smartMap } from "../utils/smartMap";
 import { Input } from "@chakra-ui/input";
+import { zhCN } from "../locales/zh-CN";
 
 const qualities = ["720p", "1080p", "2160p"] as const;
 export type videoQualities = typeof qualities[number];
@@ -66,7 +67,7 @@ export const FilterHeading = ({
     gap={2}
   >
     <Heading as={"span"} size={"sm"}>
-      Filters
+      {zhCN.filters.title}
       <LightMode>
         {indicator ? (
           <Badge bgColor={"blue.500"} color={"white"} ml={3}>
@@ -121,7 +122,7 @@ const Filters = (state: useFilterStateReturn) => {
         <Select
           width={"100%"}
           size={inputSizes}
-          placeholder={"Filter Sources..."}
+          placeholder={zhCN.filters.filterSources}
           value={state.selectedSource}
           onChange={(event) => state.setSelectedSource(event.target.value)}
         >
@@ -130,7 +131,7 @@ const Filters = (state: useFilterStateReturn) => {
           ))}
         </Select>
         <Flex gap={2} alignItems={"center"} width={{ base: "100%", lg: "70%" }}>
-          <Text whiteSpace={"nowrap"}>Min Seeds</Text>
+          <Text whiteSpace={"nowrap"}>{zhCN.filters.minSeeds}</Text>
           <Input
             min={0}
             type={"number"}

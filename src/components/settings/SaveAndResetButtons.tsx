@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Flex, LightMode, useColorModeValue } from "@chakra-ui/react";
 import { useIsLargeScreen } from "../../utils/screenSize";
 import { useSettingsCtx } from "./useSettings";
+import { zhCN } from "../../locales/zh-CN";
 
 const SaveAndResetButtons = () => {
   const isLarge = useIsLargeScreen();
@@ -27,7 +28,7 @@ const SaveAndResetButtons = () => {
       bgColor={BgColor}
     >
       <Button width={"100%"} size={"lg"} bgColor={"gray.500"} onClick={reset}>
-        Reset
+        {zhCN.common.reset}
       </Button>
       <LightMode>
         <Button
@@ -36,7 +37,7 @@ const SaveAndResetButtons = () => {
           size={"lg"}
           onClick={saveSettings}
         >
-          Save Changes
+          {zhCN.common.saveChanges}
         </Button>
       </LightMode>
     </Flex>

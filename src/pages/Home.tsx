@@ -32,8 +32,15 @@ import { FilterHeading } from "../components/Filters";
 import stateDictionary from "../utils/StateDictionary";
 import { useLocalStorage, useTernaryDarkMode } from "usehooks-ts";
 import { useFontSizeContext } from "../components/FontSizeProvider";
+import { zhCN } from "../locales/zh-CN";
 
 import { List, WindowScroller } from "react-virtualized";
+
+const SHOW_ALL_FILTER = "all";
+const LEGACY_SHOW_ALL_FILTER = ["Show", "All"].join(" ");
+
+const normalizeFilterValue = (value: string) =>
+  value === LEGACY_SHOW_ALL_FILTER ? SHOW_ALL_FILTER : value;
 
 const Home = () => {
   const { mutate: resumeAll } = useMutation("resumeAll", TorrClient.resumeAll);
@@ -119,7 +126,7 @@ const Home = () => {
       if (file.name.endsWith(".torrent")) {
         validFiles.push(file);
       } else {
-        setFileError("One or more files are not .torrent files");
+        setFileError(zhCN.home.oneOrMoreFilesInvalid);
         setDraggingOver(false);
         return;
       }
@@ -153,16 +160,16 @@ const Home = () => {
   );
   const [filterCategory, setFilterCategory] = useLocalStorage(
     "home-filter-category",
-    "Show All"
+    SHOW_ALL_FILTER
   );
   const [filterStatus, setFilterStatus] = useLocalStorage(
     "home-filter-status",
-    "Show All"
+    SHOW_ALL_FILTER
   );
 
   const resetFilters = () => {
-    setFilterStatus("Show All");
-    setFilterCategory("Show All");
+    setFilterStatus(SHOW_ALL_FILTER);
+    setFilterCategory(SHOW_ALL_FILTER);
     setFilterSearch("");
   };
 
@@ -172,8 +179,8 @@ const Home = () => {
   const filterIndicator = useMemo(() => {
     let indicator = 0;
     if (filterSearch !== "") indicator++;
-    if (filterStatus !== "Show All") indicator++;
-    if (filterCategory !== "Show All") indicator++;
+    if (normalizeFilterValue(filterStatus) !== SHOW_ALL_FILTER) indicator++;
+    if (normalizeFilterValue(filterCategory) !== SHOW_ALL_FILTER) indicator++;
 
     return indicator;
   }, [filterCategory, filterSearch, filterStatus]);
@@ -187,10 +194,14 @@ const Home = () => {
       ?.sort((a, b) => b[1]?.added_on - a[1]?.added_on)
       ?.filter(([hash]) => !removedTorrs.includes(hash))
       ?.filter(([hash, torr]) =>
-        filterCategory !== "Show All" ? torr.category === filterCategory : true
+        normalizeFilterValue(filterCategory) !== SHOW_ALL_FILTER
+          ? torr.category === filterCategory
+          : true
       )
       ?.filter(([hash, torr]) =>
-        filterStatus !== "Show All" ? torr.state === filterStatus : true
+        normalizeFilterValue(filterStatus) !== SHOW_ALL_FILTER
+          ? torr.state === filterStatus
+          : true
       )
       ?.filter(([hash, torr]) => torr.name.includes(filterSearch));
   }, [torrentsTx, removedTorrs, filterCategory, filterStatus, filterSearch]);
@@ -209,8 +220,9 @@ const Home = () => {
       {({ isScrolling, scrollTop, width, height }) => (
         <Flex flexDirection={"column"} width={"100%"}>
           <PageHeader
-            title={"Downloads"}
+            title={zhCN.home.title}
             onAddButtonClick={addModalDisclosure.onOpen}
+            buttonLabel={zhCN.home.addTorrent}
             rightSlot={
               <>
                 <IconButton
@@ -218,7 +230,7 @@ const Home = () => {
                   variant={"ghost"}
                   aspectRatio={"1 / 1"}
                   rounded={9999}
-                  aria-label={"Resume All"}
+                  aria-label={zhCN.home.resumeAll}
                   color={"text"}
                   _hover={{
                     bgColor: "grayAlpha.400",
@@ -231,7 +243,7 @@ const Home = () => {
                   variant={"ghost"}
                   aspectRatio={"1 / 1"}
                   rounded={9999}
-                  aria-label={"Pause All"}
+                  aria-label={zhCN.home.pauseAll}
                   color={"text"}
                   _hover={{
                     bgColor: "grayAlpha.400",
@@ -244,10 +256,13 @@ const Home = () => {
             isHomeHeader
           />
 
-          <IosBottomSheet title={"Add Torrent"} disclosure={addModalDisclosure}>
+          <IosBottomSheet
+            title={zhCN.home.addTorrent}
+            disclosure={addModalDisclosure}
+          >
             <VStack gap={4}>
               <FormControl isDisabled={files.length > 0}>
-                <FormLabel>{"Magnet Link / URL"}</FormLabel>
+                <FormLabel>{zhCN.home.magnetUrl}</FormLabel>
                 <Textarea
                   _disabled={{ bgColor: "gray.50" }}
                   value={textArea}
@@ -260,7 +275,7 @@ const Home = () => {
                   alignItems={"center"}
                   mb={2}
                 >
-                  <FormLabel mb={0}>{"Add with .torrent file"}</FormLabel>
+                  <FormLabel mb={0}>{zhCN.home.addTorrentFile}</FormLabel>
                   {files.length > 0 && (
                     <Button
                       size={"sm"}
@@ -271,7 +286,7 @@ const Home = () => {
                         setFiles([]);
                       }}
                     >
-                      {"Clear"}
+                      {zhCN.home.clear}
                     </Button>
                   )}
                 </Flex>
@@ -295,7 +310,13 @@ const Home = () => {
                 >
                   <IoDocumentAttach size={40} />
                   <Heading size={"sm"} noOfLines={1}>
-                    {draggingOver ? "Drop it" : files.length > 0 ? (files.length === 1 ? files[0].name : `${files.length} files selected`) : "Click or Drag and Drop"}
+                    {draggingOver
+                      ? zhCN.home.dropIt
+                      : files.length > 0
+                      ? files.length === 1
+                        ? files[0].name
+                        : `已选择 ${files.length} 个文件`
+                      : zhCN.home.clickOrDrag}
                   </Heading>
                   <Input
                     accept={".torrent"}
@@ -321,7 +342,7 @@ const Home = () => {
               </FormControl>
               <FormControl display="flex" alignItems="center">
                 <FormLabel htmlFor="automaticManagment" mb="0">
-                  Automatic Managment
+                  {zhCN.home.automaticManagement}
                 </FormLabel>
                 <Switch
                   id="automaticManagment"
@@ -333,7 +354,7 @@ const Home = () => {
               </FormControl>
               <FormControl display="flex" alignItems="center">
                 <FormLabel htmlFor="sequentialDownload" mb="0">
-                  Sequential Download
+                  {zhCN.home.sequentialDownload}
                 </FormLabel>
                 <Switch
                   id="sequentialDownload"
@@ -345,7 +366,7 @@ const Home = () => {
               </FormControl>
               <FormControl display="flex" alignItems="center">
                 <FormLabel htmlFor="firstAndLastPiece" mb="0">
-                  Download first and last piece first
+                  {zhCN.home.firstAndLastPiece}
                 </FormLabel>
                 <Switch
                   id="firstAndLastPiece"
@@ -356,7 +377,7 @@ const Home = () => {
                 />
               </FormControl>
               <FormControl>
-                <FormLabel>Download Folder</FormLabel>
+                <FormLabel>{zhCN.home.downloadFolder}</FormLabel>
                 <Input
                   type="text"
                   value={downloadFolder || ((settings as any)?.save_path || '')}
@@ -365,9 +386,9 @@ const Home = () => {
               </FormControl>
               {Categories.length && (
                 <FormControl>
-                  <FormLabel>{"Category"}</FormLabel>
+                  <FormLabel>{zhCN.home.category}</FormLabel>
                   <Select
-                    placeholder="Select category"
+                    placeholder={zhCN.home.selectCategory}
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
                   >
@@ -390,7 +411,7 @@ const Home = () => {
                   attemptAddTorrent({ autoTmm: settings?.auto_tmm_enabled, downloadFolder, payload: !!textArea ? textArea : files })
                 }
               >
-                {"Add Torrent"}
+                {zhCN.home.addTorrent}
               </Button>
             </LightMode>
           </IosBottomSheet>
@@ -403,31 +424,35 @@ const Home = () => {
             {filterDisclosure.isOpen && (
               <Flex flexDirection={"column"} gap={5} px={5} pb={5}>
                 <FormControl>
-                  <FormLabel>Search</FormLabel>
+                  <FormLabel>{zhCN.home.search}</FormLabel>
                   <Input
                     value={filterSearch}
                     onChange={(e) => setFilterSearch(e.target.value)}
                   />
                 </FormControl>
                 <FormControl>
-                  <FormLabel>Category</FormLabel>
+                  <FormLabel>{zhCN.home.category}</FormLabel>
                   <Select
-                    value={filterCategory}
-                    onChange={(e) => setFilterCategory(e.target.value)}
+                    value={normalizeFilterValue(filterCategory)}
+                    onChange={(e) =>
+                      setFilterCategory(normalizeFilterValue(e.target.value))
+                    }
                   >
-                    <option>Show All</option>
+                    <option value={SHOW_ALL_FILTER}>{zhCN.home.showAll}</option>
                     {Categories.map((cat) => (
                       <option key={cat.label}>{cat.label}</option>
                     ))}
                   </Select>
                 </FormControl>
                 <FormControl>
-                  <FormLabel>Status</FormLabel>
+                  <FormLabel>{zhCN.home.status}</FormLabel>
                   <Select
-                    value={filterStatus}
-                    onChange={(e) => setFilterStatus(e.target.value)}
+                    value={normalizeFilterValue(filterStatus)}
+                    onChange={(e) =>
+                      setFilterStatus(normalizeFilterValue(e.target.value))
+                    }
                   >
-                    <option>Show All</option>
+                    <option value={SHOW_ALL_FILTER}>{zhCN.home.showAll}</option>
                     {Object.entries(stateDictionary).map(([key, data]) => (
                       <option key={key} value={key}>
                         {data.short}
@@ -452,10 +477,10 @@ const Home = () => {
 
             {Torrents.length === 0 && filterIndicator > 0 && (
               <Flex alignItems={"center"} flexDirection={"column"} gap={4}>
-                <Heading size={"md"}>Could not find any results</Heading>
+                <Heading size={"md"}>{zhCN.home.noResults}</Heading>
                 <LightMode>
                   <Button onClick={resetFilters} colorScheme={"blue"}>
-                    Reset Filters
+                    {zhCN.home.resetFilters}
                   </Button>
                 </LightMode>
               </Flex>

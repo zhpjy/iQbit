@@ -17,6 +17,7 @@ import filesize from "filesize";
 import SwarmVisualizer from "./SwarmVisualizer";
 import { CreateETAString } from "../utils/createETAString";
 import ActivityRing from "./ActivityRing";
+import { zhCN } from "../locales/zh-CN";
 
 export interface TorrentInformationContentProps {
   torrentData: TorrTorrentInfo;
@@ -63,7 +64,7 @@ const TorrentInformationContent = ({
 
   return (
     <>
-      <IosGridBox mb={3} title={"Torrent Name"}>
+      <IosGridBox mb={3} title={zhCN.torrentInfo.torrentName}>
         <Heading wordBreak={"break-all"}>{torrentData.name}</Heading>
       </IosGridBox>
       <SimpleGrid columns={4} templateRows={"auto"} gap={defaultGap}>
@@ -85,7 +86,7 @@ const TorrentInformationContent = ({
               size={100}
               strokeWidth={15}
             />
-            <Heading>{torrentData.ratio.toFixed(2)} Ratio</Heading>
+            <Heading>{torrentData.ratio.toFixed(2)} {zhCN.torrentInfo.ratio}</Heading>
           </Flex>
           {RatioRowAmount > 0 && (
             <Flex
@@ -117,13 +118,15 @@ const TorrentInformationContent = ({
               mt={3}
               onClick={showFullRatio.onToggle}
             >
-              {showFullRatio.isOpen ? "Hide Some Rings" : "Show All Rings"}
+              {showFullRatio.isOpen
+                ? zhCN.torrentInfo.hideSomeRings
+                : zhCN.torrentInfo.showAllRings}
             </Button>
           )}
         </IosGridBox>
         <IosGridBox
           order={2}
-          title={"Torrent Size"}
+          title={zhCN.torrentInfo.torrentSize}
           colSpan={{ base: 4, sm: 2 }}
           flexGrow={2}
           h={"100%"}
@@ -134,7 +137,7 @@ const TorrentInformationContent = ({
         </IosGridBox>
         <IosGridBox
           order={3}
-          title={"Uploaded"}
+          title={zhCN.torrentInfo.uploaded}
           colSpan={{ base: 4, sm: 2 }}
           flexGrow={2}
           h={"100%"}
@@ -145,7 +148,7 @@ const TorrentInformationContent = ({
         </IosGridBox>
         <IosGridBox
           order={4}
-          title={"Download Progress"}
+          title={zhCN.torrentInfo.downloadProgress}
           flexGrow={2}
           h={"100%"}
           colSpan={4}
@@ -180,13 +183,13 @@ const TorrentInformationContent = ({
             height={32}
             connected={torrentData.num_seeds}
             swarm={torrentData.num_complete}
-            label={"Seeds"}
+            label={zhCN.torrentInfo.seeds}
           />
         </IosGridBox>
         <IosGridBox
           order={6}
           colSpan={{ base: 4, sm: 2 }}
-          title={"Download Speed"}
+          title={zhCN.torrentInfo.downloadSpeed}
         >
           <Heading
             size={"2xl"}
@@ -198,7 +201,7 @@ const TorrentInformationContent = ({
         <IosGridBox
           order={7}
           colSpan={{ base: 4, sm: 2 }}
-          title={`Download Limit`}
+          title={zhCN.torrentInfo.downloadLimit}
         >
           <Heading
             size={"2xl"}
@@ -207,14 +210,14 @@ const TorrentInformationContent = ({
             {torrentData.dl_limit > 0 ? (
               <>{filesize(torrentData.dl_limit, { round: 1 })}/s</>
             ) : (
-              "Unlimited"
+              zhCN.torrentInfo.unlimited
             )}
           </Heading>
         </IosGridBox>
         <IosGridBox
           order={8}
           colSpan={{ base: 4, sm: 2 }}
-          title={"Upload Speed"}
+          title={zhCN.torrentInfo.uploadSpeed}
         >
           <Heading
             size={"2xl"}
@@ -232,13 +235,13 @@ const TorrentInformationContent = ({
             height={32}
             connected={torrentData.num_leechs}
             swarm={torrentData.num_incomplete}
-            label={"Leeches"}
+            label={zhCN.torrentInfo.leeches}
           />
         </IosGridBox>
         <IosGridBox
           order={10}
           colSpan={{ base: 4, sm: 2 }}
-          title={"Upload Limit"}
+          title={zhCN.torrentInfo.uploadLimit}
         >
           <Heading
             size={"2xl"}
@@ -247,7 +250,7 @@ const TorrentInformationContent = ({
             {torrentData.up_limit > 0 ? (
               <>{filesize(torrentData.dl_limit, { round: 1 })}/s</>
             ) : (
-              "Unlimited"
+              zhCN.torrentInfo.unlimited
             )}
           </Heading>
         </IosGridBox>

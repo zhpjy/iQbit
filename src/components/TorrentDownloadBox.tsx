@@ -18,6 +18,7 @@ import { TorrClient } from "../utils/TorrClient";
 import { IoCheckmark, IoChevronDown, IoTv, IoFilm } from "react-icons/io5";
 import { useLocalStorage } from "usehooks-ts";
 import { pushToServarr } from "../utils/ServarrClient";
+import { zhCN } from "../locales/zh-CN";
 
 export interface TorrentDownloadBoxProps {
   title?: string;
@@ -104,7 +105,7 @@ const TorrentDownloadBox = ({
               }}
               leftIcon={anySuccess ? <IoCheckmark /> : undefined}
             >
-              {anySuccess ? "Sent" : "Download"}
+              {anySuccess ? zhCN.common.sent : zhCN.common.download}
             </Button>
 
             {(sonarrUrl || radarrUrl) && (
@@ -128,7 +129,7 @@ const TorrentDownloadBox = ({
                         else if (onSelect) callbackMutation("sonarr");
                       }}
                     >
-                      Send to Sonarr
+                      {zhCN.downloadBox.sendToSonarr}
                     </MenuItem>
                   )}
                   {radarrUrl && (
@@ -139,7 +140,7 @@ const TorrentDownloadBox = ({
                         else if (onSelect) callbackMutation("radarr");
                       }}
                     >
-                      Send to Radarr
+                      {zhCN.downloadBox.sendToRadarr}
                     </MenuItem>
                   )}
                 </MenuList>

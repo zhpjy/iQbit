@@ -4,6 +4,7 @@ import IosActionSheet from "./ios/IosActionSheet";
 import React from "react";
 import {useQuery} from "react-query";
 import {TorrClient} from "../utils/TorrClient";
+import { zhCN } from "../locales/zh-CN";
 
 export type CategorySelectProps = {
     category:string;
@@ -25,11 +26,11 @@ const CategorySelect = ({category, onSelected}:CategorySelectProps) => {
    <>
      <Flex alignItems={"center"}>
        <Button opacity={category ? "100%" : "50%"} variant={"unstyled"} display={"flex"} minH={0} height={"auto"} rightIcon={<IoChevronDown />} onClick={catDisclosure.onOpen}>
-         <Heading size={"sm"}>{category || "Category"}</Heading>
+         <Heading size={"sm"}>{category || zhCN.home.category}</Heading>
        </Button>
      </Flex>
      <IosActionSheet disclosure={catDisclosure} options={[
-       {label: "No Category", onClick: () => onSelected("")},
+       {label: zhCN.categories.noCategory, onClick: () => onSelected("")},
        ...(Object.values(categories ?? {})?.map((cat) => ({
          label:cat.name,
          onClick: () => {
