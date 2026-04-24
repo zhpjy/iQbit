@@ -48,12 +48,11 @@ const normalizeFilterValue = (value: string) =>
 const encodeCategoryFilterValue = (category: string) =>
   `${CATEGORY_FILTER_PREFIX}${category}`;
 
-const normalizeCategoryFilterValue = (value: string) => {
-  if (
-    value === CATEGORY_FILTER_ALL ||
-    value === LEGACY_SHOW_ALL_FILTER ||
-    value === LEGACY_CATEGORY_ALL_FILTER
-  ) {
+const normalizeCategoryFilterValue = (
+  value: string,
+  categoryNames: string[]
+) => {
+  if (value === CATEGORY_FILTER_ALL) {
     return CATEGORY_FILTER_ALL;
   }
 
@@ -61,11 +60,25 @@ const normalizeCategoryFilterValue = (value: string) => {
     return value;
   }
 
+  if (categoryNames.includes(value)) {
+    return encodeCategoryFilterValue(value);
+  }
+
+  if (
+    value === LEGACY_SHOW_ALL_FILTER ||
+    value === LEGACY_CATEGORY_ALL_FILTER
+  ) {
+    return CATEGORY_FILTER_ALL;
+  }
+
   return encodeCategoryFilterValue(value);
 };
 
-const decodeCategoryFilterValue = (value: string) => {
-  const normalizedValue = normalizeCategoryFilterValue(value);
+const decodeCategoryFilterValue = (
+  value: string,
+  categoryNames: string[]
+) => {
+  const normalizedValue = normalizeCategoryFilterValue(value, categoryNames);
 
   if (normalizedValue === CATEGORY_FILTER_ALL) {
     return { showAll: true as const, category: "" };
@@ -210,9 +223,25 @@ const Home = () => {
 
   const bgColor = useColorModeValue("white", "gray.900");
   const { isDarkMode } = useTernaryDarkMode();
-  const normalizedFilterCategory = normalizeCategoryFilterValue(filterCategory);
-  const decodedFilterCategory = decodeCategoryFilterValue(filterCategory);
+  const categoryNames = useMemo(
+    () => Object.values(categories || {}).map((category) => category.name),
+    [categories]
+  );
+  const normalizedFilterCategory = normalizeCategoryFilterValue(
+    filterCategory,
+    categoryNames
+  );
+  const decodedFilterCategory = decodeCategoryFilterValue(
+    filterCategory,
+    categoryNames
+  );
   const normalizedFilterStatus = normalizeFilterValue(filterStatus);
+
+  useEffect(() => {
+    if (normalizedFilterCategory !== filterCategory) {
+      setFilterCategory(normalizedFilterCategory);
+    }
+  }, [filterCategory, normalizedFilterCategory, setFilterCategory]);
 
   const filterIndicator = useMemo(() => {
     let indicator = 0;
@@ -252,11 +281,11 @@ const Home = () => {
   ]);
 
   const Categories = useMemo(() => {
-    return Object.values(categories || {}).map((c) => ({
-      label: c.name,
-      value: encodeCategoryFilterValue(c.name),
+    return categoryNames.map((categoryName) => ({
+      label: categoryName,
+      value: encodeCategoryFilterValue(categoryName),
     }));
-  }, [categories]);
+  }, [categoryNames]);
 
   const fontSizeContext = useFontSizeContext();
 
