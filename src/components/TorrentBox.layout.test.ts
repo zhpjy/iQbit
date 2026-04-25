@@ -18,8 +18,10 @@ describe("getTorrentTitleLayoutProps", () => {
         flex: 1,
         minW: 0,
         noOfLines: 2,
+        overflowWrap: "anywhere",
         size: "md",
         textAlign: "left",
+        wordBreak: "keep-all",
       },
     });
   });
@@ -28,7 +30,7 @@ describe("getTorrentTitleLayoutProps", () => {
 describe("getTorrentCardContainerProps", () => {
   it("keeps the card compact while preserving spacing between rows", () => {
     expect(getTorrentCardContainerProps()).toEqual({
-      mb: 4,
+      mb: 2,
       px: 4,
       py: 3,
       rounded: "xl",
@@ -38,7 +40,7 @@ describe("getTorrentCardContainerProps", () => {
 
 describe("getTorrentListRowHeight", () => {
   it("scales the row height from a larger compact-card baseline", () => {
-    expect(getTorrentListRowHeight(100)).toBe(248);
-    expect(getTorrentListRowHeight(125)).toBe(310);
+    expect(getTorrentListRowHeight(100)).toBe(240);
+    expect(getTorrentListRowHeight(125)).toBe(300);
   });
 });

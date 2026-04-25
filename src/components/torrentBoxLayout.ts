@@ -1,4 +1,4 @@
-const TORRENT_LIST_BASE_ROW_HEIGHT = 248;
+const TORRENT_LIST_BASE_ROW_HEIGHT = 240;
 
 export const getTorrentTitleLayoutProps = () => ({
   container: {
@@ -12,13 +12,15 @@ export const getTorrentTitleLayoutProps = () => ({
     flex: 1,
     minW: 0,
     noOfLines: 2,
+    overflowWrap: "anywhere" as const,
     size: "md" as const,
     textAlign: "left" as const,
+    wordBreak: "keep-all" as const,
   },
 });
 
 export const getTorrentCardContainerProps = () => ({
-  mb: 4,
+  mb: 2,
   px: 4,
   py: 3,
   rounded: "xl" as const,
