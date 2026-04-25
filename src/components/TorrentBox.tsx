@@ -49,6 +49,7 @@ import { useIsLargeScreen } from "../utils/screenSize";
 import { GlassContainer } from "./GlassContainer";
 import { colors } from "../App";
 import { zhCN } from "../locales/zh-CN";
+import { getTorrentTitleLayoutProps } from "./torrentBoxLayout";
 
 export interface TorrentBoxProps {
   torrentData: Omit<TorrTorrentInfo, "hash">;
@@ -66,6 +67,7 @@ const TorrentBox = ({
   style,
 }: TorrentBoxProps) => {
   const BoxBg = useColorModeValue("white", "gray.900");
+  const titleLayoutProps = getTorrentTitleLayoutProps();
 
   const isDone = (torrentData.progress || 0) >= 1;
 
@@ -204,12 +206,9 @@ const TorrentBox = ({
       <Box px={5} py={4} rounded={"xl"} bgColor={BoxBg} mb={5}>
         <Popover placement={"top"}>
           <PopoverTrigger>
-            <Flex alignItems={"center"}>
+            <Flex {...titleLayoutProps.container}>
               <Heading
-                textAlign={"left"}
-                cursor={"pointer"}
-                noOfLines={1}
-                size={"lg"}
+                {...titleLayoutProps.title}
                 _hover={{ base: {}, lg: { opacity: 0.7 } }}
               >
                 {torrentData.name}
