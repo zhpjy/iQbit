@@ -30,7 +30,7 @@ describe("getTorrentTitleLayoutProps", () => {
 describe("getTorrentCardContainerProps", () => {
   it("keeps the card compact while preserving spacing between rows", () => {
     expect(getTorrentCardContainerProps()).toEqual({
-      mb: 2,
+      mb: 1,
       px: 4,
       py: 3,
       rounded: "xl",
@@ -40,7 +40,7 @@ describe("getTorrentCardContainerProps", () => {
 
 describe("getTorrentListRowHeight", () => {
   it("scales the row height from a larger compact-card baseline", () => {
-    expect(getTorrentListRowHeight(100)).toBe(240);
-    expect(getTorrentListRowHeight(125)).toBe(300);
+    expect(getTorrentListRowHeight(100)).toBe(230);
+    expect(getTorrentListRowHeight(125)).toBe(287.5);
   });
 });
