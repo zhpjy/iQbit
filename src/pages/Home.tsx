@@ -32,6 +32,7 @@ import { FilterHeading } from "../components/Filters";
 import stateDictionary from "../utils/StateDictionary";
 import { useLocalStorage, useTernaryDarkMode } from "usehooks-ts";
 import { useFontSizeContext } from "../components/FontSizeProvider";
+import { getTorrentListRowHeight } from "../components/torrentBoxLayout";
 import { zhCN } from "../locales/zh-CN";
 
 import { List, WindowScroller } from "react-virtualized";
@@ -615,7 +616,7 @@ const Home = () => {
             <List
               autoWidth
               rowCount={Torrents.length}
-              rowHeight={(230 * fontSizeContext.scale) / 100}
+              rowHeight={getTorrentListRowHeight(fontSizeContext.scale)}
               width={width}
               height={height}
               scrollTop={scrollTop}

@@ -1,4 +1,8 @@
-import { getTorrentTitleLayoutProps } from "./torrentBoxLayout";
+import {
+  getTorrentCardContainerProps,
+  getTorrentListRowHeight,
+  getTorrentTitleLayoutProps,
+} from "./torrentBoxLayout";
 
 describe("getTorrentTitleLayoutProps", () => {
   it("keeps the title area flexible without collapsing to content width", () => {
@@ -14,9 +18,27 @@ describe("getTorrentTitleLayoutProps", () => {
         flex: 1,
         minW: 0,
         noOfLines: 2,
-        size: "lg",
+        size: "md",
         textAlign: "left",
       },
     });
+  });
+});
+
+describe("getTorrentCardContainerProps", () => {
+  it("keeps the card compact while preserving spacing between rows", () => {
+    expect(getTorrentCardContainerProps()).toEqual({
+      mb: 4,
+      px: 4,
+      py: 3,
+      rounded: "xl",
+    });
+  });
+});
+
+describe("getTorrentListRowHeight", () => {
+  it("scales the row height from a larger compact-card baseline", () => {
+    expect(getTorrentListRowHeight(100)).toBe(248);
+    expect(getTorrentListRowHeight(125)).toBe(310);
   });
 });

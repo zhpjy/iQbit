@@ -49,7 +49,11 @@ import { useIsLargeScreen } from "../utils/screenSize";
 import { GlassContainer } from "./GlassContainer";
 import { colors } from "../App";
 import { zhCN } from "../locales/zh-CN";
-import { getTorrentTitleLayoutProps } from "./torrentBoxLayout";
+import {
+  getTorrentCardContainerProps,
+  getTorrentTitleLayoutProps,
+} from "./torrentBoxLayout";
+import { formatTorrentDisplayName } from "./torrentDisplayName";
 
 export interface TorrentBoxProps {
   torrentData: Omit<TorrTorrentInfo, "hash">;
@@ -67,7 +71,9 @@ const TorrentBox = ({
   style,
 }: TorrentBoxProps) => {
   const BoxBg = useColorModeValue("white", "gray.900");
+  const cardContainerProps = getTorrentCardContainerProps();
   const titleLayoutProps = getTorrentTitleLayoutProps();
+  const displayName = formatTorrentDisplayName(torrentData.name);
 
   const isDone = (torrentData.progress || 0) >= 1;
 
@@ -203,7 +209,7 @@ const TorrentBox = ({
 
   return (
     <div style={style}>
-      <Box px={5} py={4} rounded={"xl"} bgColor={BoxBg} mb={5}>
+      <Box {...cardContainerProps} bgColor={BoxBg}>
         <Popover placement={"top"}>
           <PopoverTrigger>
             <Flex {...titleLayoutProps.container}>
@@ -211,7 +217,7 @@ const TorrentBox = ({
                 {...titleLayoutProps.title}
                 _hover={{ base: {}, lg: { opacity: 0.7 } }}
               >
-                {torrentData.name}
+                {displayName}
               </Heading>
               {waiting === "name" && (
                 <Flex>
@@ -221,7 +227,7 @@ const TorrentBox = ({
             </Flex>
           </PopoverTrigger>
           <PopoverContent>
-            <PopoverBody textAlign={"center"}>{torrentData.name}</PopoverBody>
+            <PopoverBody textAlign={"center"}>{displayName}</PopoverBody>
           </PopoverContent>
         </Popover>
         <HStack color={"grayAlpha.800"} gap={2}>
@@ -239,9 +245,9 @@ const TorrentBox = ({
             label={torrentData.category || "–"}
           />
         </HStack>
-        <Flex mt={5} mb={2} justifyContent={"space-between"} alignItems={"end"}>
+        <Flex mt={4} mb={1} justifyContent={"space-between"} alignItems={"end"}>
           <HStack alignItems={"end"}>
-            <Heading color={"blue.500"} size={"lg"}>
+            <Heading color={"blue.500"} size={"md"}>
               {(100 * torrentData.progress).toFixed(0)}%
             </Heading>
             {!isDone && (
@@ -250,7 +256,7 @@ const TorrentBox = ({
               </Text>
             )}
           </HStack>
-          <Heading size={"md"} opacity={0.25}>
+          <Heading size={"sm"} opacity={0.25}>
             {torrentData.eta !== 8640000 ? (
               <span>{timeString}</span>
             ) : (
@@ -268,7 +274,7 @@ const TorrentBox = ({
             color={"blue.500"}
           />
         </LightMode>
-        <Flex justifyContent={"flex-end"} alignItems={"center"} mt={3}>
+        <Flex justifyContent={"flex-end"} alignItems={"center"} mt={2}>
           {isPaused || (
             <Flex alignItems={"center"} gap={4} flexGrow={2}>
               <StatWithIcon
@@ -417,9 +423,9 @@ const TorrentBox = ({
             {newName !== torrentData.name && (
               <FormHelperText fontSize={"sm"} textAlign={"center"}>
                 <VStack mt={7}>
-                  <span>{torrentData.name}</span>
+                  <span>{displayName}</span>
                   <IoArrowDown />
-                  <span>{newName}</span>
+                  <span>{formatTorrentDisplayName(newName)}</span>
                 </VStack>
               </FormHelperText>
             )}
@@ -451,10 +457,11 @@ const LoadingCard = memo(_LoadingCard, () => true);
 
 function _LoadingCard(props: BoxProps) {
   const BoxBg = useColorModeValue("white", "gray.900");
+  const cardContainerProps = getTorrentCardContainerProps();
 
   return (
     <Box {...props}>
-      <Box px={5} py={4} rounded={"xl"} bgColor={BoxBg} mb={5}>
+      <Box {...cardContainerProps} bgColor={BoxBg}>
         <Skeleton
           height={5}
           width={(Math.random() * (100 - 40) + 40).toString() + "%"}
@@ -465,7 +472,7 @@ function _LoadingCard(props: BoxProps) {
           <Skeleton height={4} width={12} />
         </Flex>
         <Flex
-          mt={4}
+          mt={3}
           gap={2}
           justifyContent={"space-between"}
           alignItems={"end"}
@@ -474,7 +481,7 @@ function _LoadingCard(props: BoxProps) {
           <Skeleton height={5} width={20} />
         </Flex>
         <Skeleton mt={2} height={3} width={"100%"} />
-        <Flex mt={4} justifyContent={"space-between"} alignItems={"center"}>
+        <Flex mt={3} justifyContent={"space-between"} alignItems={"center"}>
           <Flex gap={2}>
             <Skeleton height={4} width={16} />
             <Skeleton height={4} width={24} />

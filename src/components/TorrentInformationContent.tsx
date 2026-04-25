@@ -18,6 +18,7 @@ import SwarmVisualizer from "./SwarmVisualizer";
 import { CreateETAString } from "../utils/createETAString";
 import ActivityRing from "./ActivityRing";
 import { zhCN } from "../locales/zh-CN";
+import { formatTorrentDisplayName } from "./torrentDisplayName";
 
 export interface TorrentInformationContentProps {
   torrentData: TorrTorrentInfo;
@@ -55,6 +56,7 @@ const TorrentInformationContent = ({
   const { colors } = useTheme();
 
   const fullRatios = Math.floor(torrentData.ratio);
+  const displayName = formatTorrentDisplayName(torrentData.name);
   const RatioRowAmount = fullRatios - 1;
   const showFullRatio = useDisclosure();
 
@@ -65,7 +67,7 @@ const TorrentInformationContent = ({
   return (
     <>
       <IosGridBox mb={3} title={zhCN.torrentInfo.torrentName}>
-        <Heading wordBreak={"break-all"}>{torrentData.name}</Heading>
+        <Heading wordBreak={"break-all"}>{displayName}</Heading>
       </IosGridBox>
       <SimpleGrid columns={4} templateRows={"auto"} gap={defaultGap}>
         <IosGridBox
