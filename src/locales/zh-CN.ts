@@ -27,6 +27,7 @@ export const zhCN = {
     apply: "应用",
     download: "下载",
     sent: "已发送",
+    added: "已添加",
     default: "默认",
   },
   home: {

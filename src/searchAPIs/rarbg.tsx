@@ -125,6 +125,7 @@ const RarbgSearch = (props: SearchProviderComponentProps) => {
             title={torr.title}
             magnetURL={torr.download}
             category={addToCategory}
+            existingTorrentHashes={props.existingTorrentHashes}
           >
             {props.category === "Movies" && (
               <TorrentMovieData

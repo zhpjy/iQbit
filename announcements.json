@@ -8,6 +8,24 @@
   },
   "announcements": [
     {
+      "id": "Sep142026",
+      "title": "qBittorrent Login Fix",
+      "body": "Login now supports the latest qBittorrent WebUI authentication response.",
+      "type": "info"
+    },
+    {
+      "id": "Sep132026",
+      "title": "YTS Search Fix",
+      "body": "YTS search has been restored after its API endpoints moved.",
+      "type": "info"
+    },
+    {
+      "id": "Apr272026",
+      "title": "Search Results Update",
+      "body": "Search results now show Added when the torrent is already in qBittorrent.",
+      "type": "info"
+    },
+    {
       "id": "Apr162026",
       "title": "TPB Search Fix",
       "body": "Fixing TPB Search",
