@@ -126,9 +126,9 @@ const getImageColorAtPoint = (
 
   try {
     context.drawImage(element, sourceX, sourceY, 1, 1, 0, 0, 1, 1);
-    const [r, g, b, a] = context.getImageData(0, 0, 1, 1).data;
+    const data = context.getImageData(0, 0, 1, 1).data;
 
-    return { r, g, b, a: a / 255 };
+    return { r: data[0], g: data[1], b: data[2], a: data[3] / 255 };
   } catch {
     return undefined;
   }
@@ -242,9 +242,9 @@ const getBackgroundImageColorAtPoint = (
 
   try {
     context.drawImage(image, sourceX, sourceY, 1, 1, 0, 0, 1, 1);
-    const [r, g, b, a] = context.getImageData(0, 0, 1, 1).data;
+    const data = context.getImageData(0, 0, 1, 1).data;
 
-    return { r, g, b, a: a / 255 };
+    return { r: data[0], g: data[1], b: data[2], a: data[3] / 255 };
   } catch {
     urls.forEach((url) => backgroundImageCache.set(url, "failed"));
     return undefined;
@@ -263,7 +263,7 @@ const getBackgroundColorAtPoint = (
         !ignoredElement.contains(element) &&
         !element.hasAttribute("data-glass-luminance-debug")
     );
-  const target = stack[0] ?? null;
+  const target: Element | null = stack[0] ?? null;
   const imageColor = getImageColorAtPoint(target, x, y);
 
   if (imageColor) {
@@ -276,7 +276,9 @@ const getBackgroundColorAtPoint = (
       : { r: 255, g: 255, b: 255, a: 1 };
   const colors: Rgba[] = [];
 
-  for (let node = target; node; node = node.parentElement) {
+  let node: Element | null = target;
+
+  while (node) {
     const gradientColor = getGradientColorAtPoint(node, x, y);
 
     if (gradientColor) {
@@ -297,6 +299,8 @@ const getBackgroundColorAtPoint = (
     if (background && background.a > 0) {
       colors.push(background);
     }
+
+    node = node.parentElement;
   }
 
   return colors.reduceRight((bottom, top) => composite(top, bottom), fallback);

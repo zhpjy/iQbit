@@ -13,7 +13,7 @@ const SavingManagement = () => {
     <>
       <SettingsBox title={zhCN.downloads.savingManagement}>
         <SettingsSwitch
-          label={zhCN.downloads.autoManagement}
+          label={zhCN.downloads.automaticManagement}
           settingKey={"auto_tmm_enabled"}
         />
         <SettingsSwitch

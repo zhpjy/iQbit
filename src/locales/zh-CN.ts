@@ -208,6 +208,7 @@ export const zhCN = {
     title: "下载",
     whenAddingTorrent: "添加种子时",
     savingManagement: "保存管理",
+    automaticManagement: "自动管理",
     defaultSavePath: "默认保存路径",
     downloadFolder: "下载目录",
     keepIncompleteFolder: "保留未完成下载的目录",
