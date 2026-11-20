@@ -13,25 +13,13 @@ import IosInput from "./ios/IosInput";
 import { TorrClient } from "../utils/TorrClient";
 import { LoggedInRoutes } from "../Routes";
 import { CredsLocalStorageKey, useLogin } from "../utils/useLogin";
-import { useQuery } from "react-query";
 import { zhCN } from "../locales/zh-CN";
 
 export const AuthChecker = () => {
-  const { localCreds } = useLogin();
-
-  const { isSuccess: isWhiteListed } = useQuery(
-    "versionCheck",
-    TorrClient.getVersion,
-    { retry: false }
-  );
-
-  const isLoggedIn = !!localCreds.password && !!localCreds.username;
-
-  if (isLoggedIn || isWhiteListed) {
-    return <LoggedInRoutes />;
-  } else {
-    return <AuthView />;
-  }
+  // Login gate disabled: this deployment relies on qBittorrent's LAN auth bypass.
+  // If the API ever rejects requests (403), the app will show errors instead of
+  // the login form.
+  return <LoggedInRoutes />;
 };
 
 export const logout = async () => {
