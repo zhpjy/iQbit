@@ -53,6 +53,28 @@ Which isn't necessary. Since we're proxying requests, you can target a completel
 
 STANDALONE_SERVER_PORT is the port that the app will use to display iQbit.
 
+### Skipping the login page (qBittorrent auth bypass)
+
+If qBittorrent is configured to not require a login for LAN addresses, the iQbit login page can still show up:
+requests go browser -> iQbit server -> qBittorrent, so qBittorrent sees the proxy's address and no longer matches
+the whitelist. iQbit only shows the login page when `GET /api/v2/app/version` is rejected, so the way out is to make
+qBittorrent accept those requests again. Pick one:
+
+1. Add the address qBittorrent reports to the whitelist. qBittorrent logs
+   `WebUI: Authentication is required. Client address: '...' Reason: Client address does not match any whitelisted IP subnet.`
+   Add that address (often the docker bridge gateway, e.g. `172.17.0.1`, or `127.0.0.1` when iQbit uses host networking)
+   to Settings -> Web UI -> Authentication -> whitelisted IP subnets (`WebUI/AuthSubnetWhitelist`). For loopback you
+   also need `WebUI/LocalHostAuth=false`.
+2. Forward the real browser address instead (qBittorrent 5.x and newer):
+
+       QBIT_FORWARD_CLIENT_IP=true
+
+   plus in qBittorrent: Settings -> Web UI -> enable reverse proxy support (`WebUI/ReverseProxySupportEnabled`) and
+   list the iQbit host in `WebUI/TrustedReverseProxiesList`. The whitelist then only needs your LAN subnet.
+
+With forwarding on, the browser's own `Referer`/`Origin` is passed through untouched, because qBittorrent validates
+the origin against `X-Forwarded-Host` once reverse proxy support is on.
+
 ### Auto start
 
 You probably have qbittorrent auto starting when your computer boots up right. That's definitely a challenge with this
